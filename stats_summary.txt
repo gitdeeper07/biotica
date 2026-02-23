@@ -1,0 +1,15 @@
+BIOTICA Statistics Summary
+==========================
+Date: 2026-02-22
+Mean IBR: 0.683
+Median: 0.722
+Std Dev: 0.167
+Min: 0.312 (Sahara Desert)
+Max: 0.902 (Amazon Rainforest)
+
+Classification Breakdown:
+
+· PRISTINE  : 1 (12.5%)
+· FUNCTIONAL: 3 (37.5%)
+· IMPAIRED  : 3 (37.5%)
+· COLLAPSED : 1 (12.5%)

@@ -1,0 +1,41 @@
+=============================================
+BIOTICA WEEKLY REPORT
+Week: $(date +%V) - $(date +%Y)
+=============================================
+
+PERIOD: $(date -d "7 days ago" +%Y-%m-%d) to $(date +%Y-%m-%d)
+
+SUMMARY
+--------
+Total plots analyzed    : {total_plots}
+Average IBR            : {avg_ibr}
+Trend vs last week     : {trend}%
+New alerts             : {new_alerts}
+Resolved alerts        : {resolved_alerts}
+
+DAILY BREAKDOWN
+----------------
+Monday    : {mon_plots} plots, IBR={mon_ibr}, Alerts={mon_alerts}
+Tuesday   : {tue_plots} plots, IBR={tue_ibr}, Alerts={tue_alerts}
+Wednesday : {wed_plots} plots, IBR={wed_ibr}, Alerts={wed_alerts}
+Thursday  : {thu_plots} plots, IBR={thu_ibr}, Alerts={thu_alerts}
+Friday    : {fri_plots} plots, IBR={fri_ibr}, Alerts={fri_alerts}
+Saturday  : {sat_plots} plots, IBR={sat_ibr}, Alerts={sat_alerts}
+Sunday    : {sun_plots} plots, IBR={sun_ibr}, Alerts={sun_alerts}
+
+WEEKLY STATISTICS
+------------------
+Mean IBR      : {weekly_mean}
+Std Dev       : {weekly_std}
+Minimum IBR   : {weekly_min}
+Maximum IBR   : {weekly_max}
+
+ALERTS THIS WEEK
+-----------------
+{alerts_list}
+
+RECOMMENDATIONS
+----------------
+{recommendations}
+
+=============================================

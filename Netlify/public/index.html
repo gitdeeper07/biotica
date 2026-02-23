@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BIOTICA 🌿 — Ecosystem Resilience Assessment Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  /* backgrounds */
+  --bg-dark:   #0a1a0f;
+  --bg-card:   #0f2318;
+  --bg-deep:   #071410;
+  --bg-light:  #132b1a;
+
+  /* greens */
+  --green-1: #0D5C3A;
+  --green-2: #1A7A50;
+  --green-3: #2DA06A;
+  --green-4: #50C88A;
+  --green-5: #8CDCB4;
+
+  /* text — all bright enough to read */
+  --text-white:  #F0FAF4;
+  --text-bright: #D4EDDF;
+  --text-medium: #A8CCBA;
+  --text-soft:   #78A08C;
+
+  /* accents */
+  --gold:   #E8B95A;
+  --gold-d: #C8973A;
+  --coral:  #E07050;
+
+  /* fonts */
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans:  'Inter', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-bright);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── grid texture ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(45,160,106,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,160,106,.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ══════════════ NAV ══════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 3rem;
+  background: rgba(10,26,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(45,160,106,.25);
+}
+.nav-logo {
+  font-family: var(--sans);
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--green-4);
+  text-decoration: none; letter-spacing: .04em;
+}
+.nav-logo span { color: var(--gold); }
+
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a {
+  font-size: 1rem; font-weight: 500;
+  color: var(--text-medium);
+  text-decoration: none; letter-spacing: .04em;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--green-4); }
+
+.nav-tag {
+  font-family: var(--mono);
+  font-size: .82rem;
+  color: var(--text-soft);
+}
+
+/* ══════════════ HERO ══════════════ */
+#hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 5rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 55%, rgba(13,92,58,.4) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 15% 85%, rgba(200,151,58,.1) 0%, transparent 60%);
+}
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: .95rem; letter-spacing: .22em;
+  color: var(--green-4);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  animation: up .7s .1s both;
+}
+
+.hero-icon {
+  font-size: 4rem; display: block;
+  margin-bottom: 1rem;
+  animation: float 5s ease-in-out infinite, up .7s .15s both;
+  filter: drop-shadow(0 0 24px rgba(45,160,106,.6));
+}
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-14px) rotate(2deg); }
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(5rem, 13vw, 10rem);
+  font-weight: 900; line-height: .92;
+  color: var(--text-white);
+  letter-spacing: -.02em;
+  text-shadow: 0 0 80px rgba(45,160,106,.35);
+  animation: up .8s .2s both;
+}
+.hero-title em { color: var(--green-4); font-style: italic; }
+
+.hero-sub {
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+  font-style: italic; font-weight: 400;
+  color: var(--text-medium);
+  max-width: 700px; margin: 1.4rem auto 0;
+  animation: up .8s .3s both;
+}
+
+.hero-quote {
+  font-family: var(--sans);
+  font-size: 1.05rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 1.6rem;
+  animation: up .8s .4s both;
+}
+
+/* stat strip */
+.hero-stats {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  margin-top: 3.5rem; gap: 0;
+  border: 1px solid rgba(80,200,138,.3);
+  border-radius: 6px; overflow: hidden;
+  max-width: 900px; width: 100%;
+  animation: up .9s .5s both;
+  background: rgba(15,35,24,.7);
+  backdrop-filter: blur(8px);
+}
+.h-stat {
+  flex: 1; min-width: 150px;
+  padding: 1.6rem 1.2rem; text-align: center;
+  border-right: 1px solid rgba(45,160,106,.2);
+}
+.h-stat:last-child { border-right: none; }
+.h-val {
+  display: block;
+  font-family: var(--sans); font-size: 2.2rem; font-weight: 700;
+  color: var(--gold); line-height: 1;
+}
+.h-lbl {
+  display: block;
+  font-family: var(--mono); font-size: .82rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-medium); margin-top: .5rem;
+}
+
+/* ctas */
+.hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  margin-top: 3rem;
+  animation: up 1s .65s both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--sans); font-size: 1rem; font-weight: 600;
+  letter-spacing: .06em; text-decoration: none;
+  padding: .9rem 1.9rem; border-radius: 4px;
+  transition: all .22s;
+}
+.btn-g { background: var(--green-1); color: var(--text-white); border: 1px solid var(--green-2); }
+.btn-g:hover { background: var(--green-2); box-shadow: 0 0 22px rgba(45,160,106,.4); transform: translateY(-2px); }
+.btn-o { background: transparent; color: var(--green-4); border: 1px solid rgba(80,200,138,.45); }
+.btn-o:hover { background: rgba(80,200,138,.1); transform: translateY(-2px); }
+.btn-gold { background: transparent; color: var(--gold); border: 1px solid rgba(232,185,90,.45); }
+.btn-gold:hover { background: rgba(232,185,90,.1); transform: translateY(-2px); }
+
+@keyframes up {
+  from { opacity:0; transform: translateY(22px); }
+  to   { opacity:1; transform: none; }
+}
+
+/* ══════════════ SHARED ══════════════ */
+section { position: relative; z-index: 1; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
+.sec-pad { padding: 8rem 0; }
+
+.sec-head { text-align: center; margin-bottom: 5rem; }
+.sec-eyebrow {
+  font-family: var(--mono); font-size: .95rem;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--green-3); display: block; margin-bottom: 1rem;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700; color: var(--text-white); line-height: 1.1;
+}
+.sec-title em { color: var(--green-4); font-style: italic; }
+.sec-desc {
+  font-size: 1.2rem; color: var(--text-medium);
+  max-width: 640px; margin: 1.2rem auto 0;
+  font-style: italic; font-family: var(--serif);
+}
+.rule { width: 60px; height: 2px; background: linear-gradient(90deg,transparent,var(--green-3),transparent); margin: 1.8rem auto 0; }
+
+/* ══════════════ METRICS BAND ══════════════ */
+#metrics {
+  background: linear-gradient(135deg, var(--bg-light), var(--bg-card));
+  border-top: 1px solid rgba(45,160,106,.2);
+  border-bottom: 1px solid rgba(45,160,106,.2);
+  padding: 4rem 0; position: relative; z-index: 1;
+}
+.metrics-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); }
+.m-card {
+  padding: 2.2rem 1.4rem; text-align: center;
+  border-right: 1px solid rgba(45,160,106,.18);
+  transition: background .2s;
+}
+.m-card:last-child { border-right: none; }
+.m-card:hover { background: rgba(45,160,106,.08); }
+.m-ico { font-size: 2rem; display: block; margin-bottom: .6rem; }
+.m-val {
+  display: block; font-family: var(--sans);
+  font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1;
+}
+.m-lbl {
+  display: block; font-family: var(--mono);
+  font-size: .82rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-medium);
+  margin-top: .55rem; line-height: 1.45;
+}
+
+/* ══════════════ ABOUT ══════════════ */
+#about { border-top: 1px solid rgba(45,160,106,.12); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.about-text p {
+  font-size: 1.2rem; color: var(--text-bright);
+  line-height: 1.85; margin-bottom: 1.5rem;
+}
+.about-text strong { color: var(--green-4); font-weight: 600; }
+.blockq {
+  border-left: 3px solid var(--green-3);
+  padding-left: 1.5rem; margin: 2rem 0;
+  font-family: var(--serif);
+  font-size: 1.25rem; font-style: italic;
+  color: var(--text-medium); line-height: 1.7;
+}
+
+.formula-box {
+  background: var(--bg-card);
+  border: 1px solid rgba(45,160,106,.28);
+  border-radius: 8px; padding: 2.2rem;
+}
+.formula-box pre {
+  font-family: var(--mono); font-size: .95rem;
+  color: var(--green-4); line-height: 2; white-space: pre-wrap;
+}
+.fc  { color: var(--text-soft); }
+.fw  { color: var(--gold); }
+.fl  { color: var(--text-medium); }
+
+/* ══════════════ PARAMETERS ══════════════ */
+#parameters { border-top: 1px solid rgba(45,160,106,.1); }
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px,1fr));
+  gap: 1.4rem;
+}
+.p-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(45,160,106,.2);
+  border-radius: 8px; padding: 2rem;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  position: relative; overflow: hidden;
+}
+.p-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg,transparent,var(--green-3),transparent);
+  opacity:0; transition: opacity .25s;
+}
+.p-card:hover { border-color: rgba(80,200,138,.5); transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,.4); }
+.p-card:hover::before { opacity:1; }
+
+.p-head { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+.p-badge {
+  width:48px; height:48px; border-radius:50%;
+  background: var(--green-1);
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--sans); font-size:1rem; font-weight:700; color:#fff;
+  flex-shrink:0; box-shadow: 0 0 0 4px rgba(13,92,58,.25);
+}
+.p-label { font-family: var(--sans); font-size:.88rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color: var(--green-3); }
+.p-sym { font-family: var(--mono); font-size:.78rem; color: var(--gold); margin-top:.1rem; display:block; }
+.p-name { font-family: var(--serif); font-size:1.4rem; font-weight:700; color: var(--text-white); margin-bottom:.6rem; }
+.p-desc { font-size:1.1rem; color: var(--text-medium); line-height:1.7; }
+.p-domain {
+  margin-top:1rem; font-family: var(--mono); font-size:.8rem;
+  color: var(--green-2); letter-spacing:.08em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.4rem;
+}
+.p-domain::before { content:''; display:inline-block; width:10px; height:2px; background:var(--green-2); }
+
+/* ══════════════ IBR LEVELS ══════════════ */
+#ibr { background: linear-gradient(180deg,transparent,rgba(13,92,58,.07) 50%,transparent); }
+.ibr-list { display:flex; flex-direction:column; gap:.6rem; max-width:860px; margin:0 auto; }
+.ibr-row {
+  display: grid; grid-template-columns: 200px 140px 1fr;
+  align-items:center; gap:1.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(45,160,106,.15);
+  border-radius: 6px;
+  transition: all .2s;
+}
+.ibr-row:hover { border-color: rgba(80,200,138,.38); transform:translateX(6px); }
+
+.ibr-name {
+  font-family: var(--sans); font-size:1.05rem; font-weight:700;
+  letter-spacing:.1em; display:flex; align-items:center; gap:.7rem;
+}
+.dot { width:11px; height:11px; border-radius:50%; box-shadow:0 0 8px currentColor; flex-shrink:0; }
+.ibr-score { font-family: var(--mono); font-size:1rem; color: var(--text-medium); text-align:center; }
+.ibr-desc { font-size:1.05rem; font-style:italic; color: var(--text-medium); font-family: var(--serif); }
+
+.lvl-a .ibr-name { color:#4EDB8A; } .lvl-a .dot { background:#4EDB8A; color:#4EDB8A; }
+.lvl-b .ibr-name { color: var(--green-4); } .lvl-b .dot { background: var(--green-4); color: var(--green-4); }
+.lvl-c .ibr-name { color: var(--gold); } .lvl-c .dot { background: var(--gold); color: var(--gold); }
+.lvl-d .ibr-name { color: var(--coral); } .lvl-d .dot { background: var(--coral); color: var(--coral); }
+.lvl-e .ibr-name { color:#888; } .lvl-e .dot { background:#777; color:#777; }
+
+/* ══════════════ CASE STUDIES ══════════════ */
+#cases { border-top: 1px solid rgba(45,160,106,.1); }
+.case-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.6rem; }
+.c-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(45,160,106,.2);
+  border-radius: 8px; overflow:hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+.c-card:hover { border-color: rgba(80,200,138,.45); box-shadow: 0 16px 48px rgba(0,0,0,.45); }
+
+.c-banner {
+  background: linear-gradient(135deg, var(--green-1), rgba(13,92,58,.55));
+  padding: 1.6rem 2rem; display:flex; align-items:center; gap:1.2rem;
+}
+.c-letter { font-family: var(--serif); font-size:2.4rem; font-weight:900; color: var(--gold); line-height:1; flex-shrink:0; }
+.c-loc { font-family: var(--mono); font-size:.82rem; color:rgba(255,255,255,.65); letter-spacing:.06em; }
+.c-title { font-family: var(--sans); font-size:1.05rem; font-weight:700; color:#fff; margin-top:.2rem; }
+
+.c-body { padding: 1.6rem 2rem; }
+.c-desc { font-family: var(--serif); font-size:1.1rem; font-style:italic; color: var(--text-medium); line-height:1.75; margin-bottom:1.4rem; }
+
+/* ── VERTICAL stats ── */
+.c-stats { display:flex; flex-direction:column; gap:.55rem; }
+.c-stat {
+  background: rgba(13,92,58,.12);
+  border: 1px solid rgba(45,160,106,.2);
+  border-left: 3px solid var(--green-2);
+  border-radius: 4px;
+  padding: 1rem 1.3rem;
+  display: flex; align-items: center; justify-content: space-between; gap:1rem;
+}
+.c-val { font-family: var(--mono); font-size:1.3rem; font-weight:500; color: var(--gold); white-space:nowrap; flex-shrink:0; }
+.c-lbl { font-family: var(--sans); font-size:.9rem; color: var(--text-medium); text-align:right; line-height:1.4; }
+
+/* ══════════════ PUBLICATIONS ══════════════ */
+#pubs { background: linear-gradient(180deg,transparent,rgba(13,92,58,.06) 50%,transparent); }
+.pub-list { display:flex; flex-direction:column; gap:1.3rem; max-width:920px; margin:0 auto; }
+.pub-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(45,160,106,.2);
+  border-radius: 8px; padding: 2rem 2.2rem;
+  display:grid; grid-template-columns:100px 1fr; gap:1.5rem; align-items:start;
+  transition: border-color .25s;
+}
+.pub-card:hover { border-color: rgba(80,200,138,.42); }
+.pub-year { font-family: var(--mono); font-size:.88rem; color: var(--green-3); letter-spacing:.06em; }
+.pub-badge {
+  display:inline-block; font-family: var(--mono); font-size:.78rem;
+  color: var(--gold); border:1px solid rgba(232,185,90,.4);
+  border-radius:3px; padding:.15rem .55rem; margin-bottom:.7rem; letter-spacing:.1em;
+}
+.pub-title { font-family: var(--serif); font-size:1.25rem; color: var(--text-white); line-height:1.5; margin-bottom:.5rem; }
+.pub-venue { font-family: var(--mono); font-size:.84rem; color: var(--text-medium); }
+.pub-doi { display:inline-block; margin-top:.7rem; font-family: var(--mono); font-size:.84rem; color: var(--green-3); text-decoration:none; border-bottom:1px solid rgba(45,160,106,.35); transition:color .2s; }
+.pub-doi:hover { color: var(--green-4); }
+
+/* ══════════════ OPEN SCIENCE CTA ══════════════ */
+#cta {
+  text-align:center;
+  padding: 8rem 2rem;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(13,92,58,.2) 0%,transparent 70%);
+  border-top: 1px solid rgba(45,160,106,.12);
+  border-bottom: 1px solid rgba(45,160,106,.12);
+  position: relative; z-index:1;
+}
+.cta-ctas { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:3rem; }
+
+/* ══════════════ FOOTER ══════════════ */
+footer {
+  background: var(--bg-deep);
+  border-top: 1px solid rgba(45,160,106,.22);
+  padding: 5rem 0 0; position: relative; z-index:1;
+}
+.foot-grid {
+  display:grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap:3rem; max-width:1200px; margin:0 auto;
+  padding: 0 2.5rem 4rem;
+}
+.foot-brand { font-family: var(--sans); font-size:1.7rem; font-weight:700; color: var(--green-4); margin-bottom:.6rem; }
+.foot-brand span { color: var(--gold); }
+.foot-tag { font-family: var(--serif); font-size:1.1rem; font-style:italic; color: var(--text-medium); line-height:1.7; }
+.foot-col h4 { font-family: var(--sans); font-size:.9rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color: var(--green-3); margin-bottom:1.3rem; }
+.foot-col ul { list-style:none; }
+.foot-col ul li { margin-bottom:.65rem; }
+.foot-col ul a { font-family: var(--sans); font-size:.98rem; color: var(--text-medium); text-decoration:none; transition:color .2s; }
+.foot-col ul a:hover { color: var(--green-4); }
+
+.foot-bottom {
+  border-top: 1px solid rgba(45,160,106,.15);
+  padding: 1.5rem 2.5rem; max-width:1200px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.8rem;
+}
+.foot-copy { font-family: var(--mono); font-size:.88rem; color: var(--text-soft); }
+.foot-legal { display:flex; gap:1.5rem; }
+.foot-legal a { font-family: var(--mono); font-size:.88rem; color: var(--text-soft); text-decoration:none; transition:color .2s; }
+.foot-legal a:hover { color: var(--green-4); }
+
+/* ══════════════ REVEAL ANIMATION ══════════════ */
+.reveal { opacity:0; transform:translateY(28px); transition: opacity .7s, transform .7s; }
+.reveal.on { opacity:1; transform:none; }
+
+/* ══════════════ RESPONSIVE ══════════════ */
+@media(max-width:960px){
+  .about-grid { grid-template-columns:1fr; gap:3rem; }
+  .case-grid  { grid-template-columns:1fr; }
+  .foot-grid  { grid-template-columns:1fr 1fr; }
+  .ibr-row    { grid-template-columns:1fr; gap:.4rem; }
+  nav .nav-links { display:none; }
+}
+@media(max-width:600px){
+  .foot-grid { grid-template-columns:1fr; }
+  .hero-stats { flex-direction:column; }
+  .h-stat { border-right:none; border-bottom:1px solid rgba(45,160,106,.2); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">BIOTI<span>CA</span> 🌿</a>
+  <ul class="nav-links">
+    <li><a href="#about">Overview</a></li>
+    <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#ibr">IBR Levels</a></li>
+    <li><a href="#cases">Case Studies</a></li>
+    <li><a href="#pubs">Publications</a></li>
+  </ul>
+  <span class="nav-tag">v1.0.0 · Active Research · 3,412 Plots · 22 Biomes</span>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <span class="hero-label">Ecosystem Resilience · Bio-Geochemical Framework · Open Science</span>
+  <span class="hero-icon">🌿</span>
+  <h1 class="hero-title">B<em>IO</em>TICA</h1>
+  <p class="hero-sub">Living Systems as Legible Archives — A Multi-Dimensional Framework for Ecosystem Resilience Assessment</p>
+  <p class="hero-quote">Four billion years of biological negotiation, made legible</p>
+
+  <div class="hero-stats">
+    <div class="h-stat"><span class="h-val">92.6%</span><span class="h-lbl">IBR Accuracy</span></div>
+    <div class="h-stat"><span class="h-val">3,412</span><span class="h-lbl">Ecosystem Plots</span></div>
+    <div class="h-stat"><span class="h-val">9</span><span class="h-lbl">Parameters</span></div>
+    <div class="h-stat"><span class="h-val">22</span><span class="h-lbl">Global Biomes</span></div>
+    <div class="h-stat"><span class="h-val">±6.2d</span><span class="h-lbl">PTS Precision</span></div>
+  </div>
+
+  <div class="hero-ctas">
+    <a href="https://gitlab.com/gitdeeper07/biotica" class="btn btn-g">🦊 GitLab Repository</a>
+    <a href="https://doi.org/10.14293/BIOTICA.2026.001" class="btn btn-o">📄 Research Paper</a>
+    <a href="https://github.com/gitdeeper07/biotica" class="btn btn-gold">📦 GitHub Mirror</a>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div id="metrics">
+  <div class="wrap">
+    <div class="metrics-row">
+      <div class="m-card"><span class="m-ico">🎯</span><span class="m-val">92.6%</span><span class="m-lbl">IBR Classification<br>Accuracy</span></div>
+      <div class="m-card"><span class="m-ico">🛰️</span><span class="m-val">89.4%</span><span class="m-lbl">AI Remote Sensing<br>Agreement</span></div>
+      <div class="m-card"><span class="m-ico">🦠</span><span class="m-val">r=0.917</span><span class="m-lbl">MDI–Carbon<br>Correlation</span></div>
+      <div class="m-card"><span class="m-ico">⚠️</span><span class="m-val">14.7%</span><span class="m-lbl">Legacy DB<br>Misclassified</span></div>
+      <div class="m-card"><span class="m-ico">⏱️</span><span class="m-val">8–14mo</span><span class="m-lbl">Tipping Point<br>Lead Time</span></div>
+      <div class="m-card"><span class="m-ico">🌱</span><span class="m-val">±31</span><span class="m-lbl">Mg C·ha⁻¹<br>Carbon Precision</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">What is BIOTICA?</span>
+      <h2 class="sec-title">A unified cipher for <em>living archives</em></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>Every ecosystem is an act of accumulated negotiation. In the slow, competitive crucible of geological time — where temperatures swung between glacial silence and equatorial fever, where five mass extinctions culled the tree of life to its meristem and watched it regrow — certain biological communities achieved extraordinary stability.</p>
+        <blockquote class="blockq">"Ecosystems are not passive collections of organisms. They are information-processing systems of extraordinary complexity — actively computing, in distributed biological hardware, the optimal allocation of energy and matter across millions of interacting agents, across timescales from seconds to millennia."</blockquote>
+        <p>BIOTICA integrates <strong>nine analytical parameters</strong> into a single <strong>Integrated Biotic Resilience (IBR) index</strong>, validated across 3,412 ecosystem plots from 22 biome types spanning 6 continents — achieving 92.6% classification accuracy.</p>
+        <p>The conventional approach to ecosystem science suffers from fragmentation. BIOTICA closes these gaps by unifying remote sensing, genomics, metagenomics, biogeochemistry, and trophic ecology into a single reproducible index.</p>
+      </div>
+      <div class="reveal" style="animation-delay:.15s">
+        <div class="formula-box">
+          <pre><span class="fc">// Integrated Biotic Resilience Index
+// BIOTICA Composite Formula
+</span>
+IBR =
+  <span class="fw">0.20</span> · VCA*  <span class="fl">// Vegetative Carbon Absorption</span>
++ <span class="fw">0.15</span> · MDI*  <span class="fl">// Microbial Diversity Index</span>
++ <span class="fw">0.12</span> · PTS*  <span class="fl">// Phenological Time Shift</span>
++ <span class="fw">0.11</span> · HFI*  <span class="fl">// Hydrological Flux Index</span>
++ <span class="fw">0.10</span> · BNC*  <span class="fl">// Biogeochemical Nutrient Cycle</span>
++ <span class="fw">0.09</span> · SGH*  <span class="fl">// Species Genetic Heterogeneity</span>
++ <span class="fw">0.08</span> · AES*  <span class="fl">// Anthropogenic Encroachment Score</span>
++ <span class="fw">0.08</span> · TMI*  <span class="fl">// Trophic Metadata Integration</span>
++ <span class="fw">0.07</span> · RRC*  <span class="fl">// Regenerative Recovery Capacity</span>
+
+<span class="fc">// Sigmoid correction for non-linear interactions:
+// IBR_corrected = σ(Σ wᵢ·xᵢ + β)
+// where σ(z) = 1 / (1 + e⁻ᶻ)</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARAMETERS -->
+<section id="parameters" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">The Nine Parameters</span>
+      <h2 class="sec-title">Each dimension of ecosystem identity, <em>measured precisely</em></h2>
+      <p class="sec-desc">Nine physically independent parameters, each capturing a distinct aspect of ecosystem resilience and biological history.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="param-grid">
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">20%</div><div><div class="p-label">VCA · Highest Weight</div><span class="p-sym">Vegetative Carbon Absorption</span></div></div>
+        <div class="p-name">Carbon Flux Architecture</div>
+        <p class="p-desc">Encodes the complete carbon uptake capacity integrating GPP via eddy covariance, leaf area index (LAI), chlorophyll content (NDRE), and canopy water content (SWIR). Mahalanobis distance to biome reference centroids.</p>
+        <div class="p-domain">Remote Sensing · Carbon Biogeochemistry</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">15%</div><div><div class="p-label">MDI</div><span class="p-sym">Microbial Diversity Index</span></div></div>
+        <div class="p-name">Invisible Governance System</div>
+        <p class="p-desc">Functional gene diversity from shotgun metagenomics — not taxonomy. Integrates N-fixation (nifH), P-solubilization (phoD), CAZymes, and carbon use efficiency. Achieves r = +0.917 correlation with carbon retention.</p>
+        <div class="p-domain">Soil Metagenomics · Functional Ecology</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">12%</div><div><div class="p-label">PTS</div><span class="p-sym">Phenological Time Shift</span></div></div>
+        <div class="p-name">The Clock of Climate Memory</div>
+        <p class="p-desc">Models seasonal timing of green-up, peak canopy, senescence, and dormancy vs. historical baselines. Detects decoupling of plant phenology from pollinator, migratory, and mycorrhizal partners. Precision: ±6.2 days.</p>
+        <div class="p-domain">Climate Ecology · Phenology Networks</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">11%</div><div><div class="p-label">HFI</div><span class="p-sym">Hydrological Flux Index</span></div></div>
+        <div class="p-name">Water Balance Efficiency</div>
+        <p class="p-desc">Primary diagnostic: AET/PET ratio, integrating soil moisture retention, surface runoff coefficient, baseflow recession, and canopy interception. Captures the efficiency of water movement through the ecosystem.</p>
+        <div class="p-domain">Ecohydrology · Water Balance Modeling</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">10%</div><div><div class="p-label">BNC</div><span class="p-sym">Biogeochemical Nutrient Cycle</span></div></div>
+        <div class="p-name">Nutrient Cycle Completeness</div>
+        <p class="p-desc">Multi-element measure of nutrient cycling integrity: nitrogen use efficiency, mycorrhizal phosphorus flux, potassium weathering, sulfur redox state, and C:N:P stoichiometry deviation from terrestrial Redfield optimum (186:13:1).</p>
+        <div class="p-domain">Soil Science · Nutrient Stoichiometry</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">9%</div><div><div class="p-label">SGH</div><span class="p-sym">Species Genetic Heterogeneity</span></div></div>
+        <div class="p-name">Evolutionary Insurance</div>
+        <p class="p-desc">Whole-genome resequencing of focal populations: expected heterozygosity (Hₑ), nucleotide diversity (π), Tajima's D, and FST-based landscape connectivity. 23% of protected populations show SGH &lt; 0.40 — severely impoverished.</p>
+        <div class="p-domain">Population Genomics · Evolutionary Biology</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">8%</div><div><div class="p-label">AES</div><span class="p-sym">Anthropogenic Encroachment Score</span></div></div>
+        <div class="p-name">The Hidden Systematic Error</div>
+        <p class="p-desc">Quantifies landscape fragmentation, N-deposition rate, invasive species pressure, hunting pressure, and edge density. AES correction resolves 14.7% of legacy database misclassifications — the largest single source of classification bias.</p>
+        <div class="p-domain">Land Use Science · Landscape Ecology</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">8%</div><div><div class="p-label">TMI</div><span class="p-sym">Trophic Metadata Integration</span></div></div>
+        <div class="p-name">Food Web Architecture</div>
+        <p class="p-desc">Network topology metrics: linkage density (L/S), connectance, mean trophic level, omnivory index, and keystone species fraction. TMI resolves 88% of forest-savanna transition zone ambiguities that spectral indices cannot.</p>
+        <div class="p-domain">Food Web Ecology · Interaction Networks</div>
+      </div>
+
+      <div class="p-card reveal">
+        <div class="p-head"><div class="p-badge">7%</div><div><div class="p-label">RRC</div><span class="p-sym">Regenerative Recovery Capacity</span></div></div>
+        <div class="p-name">Post-Disturbance Trajectories</div>
+        <p class="p-desc">Recovery chronosequence modeling: B(t) = B_max · (1 − e^(−t/τ)). Validated on 340 chronosequences and 67 documented collapse/recovery events. Provides 8–14 month tipping point early warning via critical slowing-down signatures.</p>
+        <div class="p-domain">Disturbance Ecology · Resilience Theory</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- IBR LEVELS -->
+<section id="ibr" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">Classification System</span>
+      <h2 class="sec-title">Five operational levels for <em>reproducible decisions</em></h2>
+      <p class="sec-desc">The IBR score encodes ecosystem condition, tipping point proximity, and restoration priority in a single actionable metric.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="ibr-list">
+      <div class="ibr-row lvl-a reveal"><div class="ibr-name"><span class="dot"></span>PRISTINE</div><div class="ibr-score">IBR &gt; 0.88</div><div class="ibr-desc">Reference state — full ecological function, maximum carbon stock, intact trophic web, and high genetic heterogeneity across all parameters.</div></div>
+      <div class="ibr-row lvl-b reveal"><div class="ibr-name"><span class="dot"></span>FUNCTIONAL</div><div class="ibr-score">0.75 – 0.88</div><div class="ibr-desc">Near-reference — minor departures from optimal, self-regulating resilience intact, standard monitoring and adaptive management sufficient.</div></div>
+      <div class="ibr-row lvl-c reveal"><div class="ibr-name"><span class="dot"></span>IMPAIRED</div><div class="ibr-score">0.60 – 0.75</div><div class="ibr-desc">Measurable degradation — multi-parameter restoration intervention required, recovery feasible within decades under active management.</div></div>
+      <div class="ibr-row lvl-d reveal"><div class="ibr-name"><span class="dot"></span>DEGRADED</div><div class="ibr-score">0.45 – 0.60</div><div class="ibr-desc">Significant functional loss — high tipping point risk, immediate intensive intervention required, long recovery trajectory (35–75+ years).</div></div>
+      <div class="ibr-row lvl-e reveal"><div class="ibr-name"><span class="dot"></span>COLLAPSED</div><div class="ibr-score">IBR &lt; 0.45</div><div class="ibr-desc">Alternative stable state crossed — standard recovery trajectories no longer applicable, full consortium characterization required.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="cases" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">Validated Case Studies</span>
+      <h2 class="sec-title">Landmark ecosystems from <em>four continents</em></h2>
+      <p class="sec-desc">Documented BIOTICA performance across the world's most scientifically significant and threatened ecosystems.</p>
+      <div class="rule"></div>
+    </div>
+    <div class="case-grid">
+
+      <div class="c-card reveal">
+        <div class="c-banner"><div class="c-letter">A</div><div><div class="c-loc">📍 Brazilian Amazon · 842 plots</div><div class="c-title">The Amazon Carbon Crisis: MDI as Carbon Sentinel</div></div></div>
+        <div class="c-body">
+          <p class="c-desc">First quantitative demonstration that microbial community collapse precedes visible canopy degradation by 4–7 years — opening a new window on invisible carbon sink erosion.</p>
+          <div class="c-stats">
+            <div class="c-stat"><span class="c-val">0.847</span><span class="c-lbl">MDI intact core (&gt;50 km)</span></div>
+            <div class="c-stat"><span class="c-val">0.674</span><span class="c-lbl">MDI near edge (&lt;8 km)</span></div>
+            <div class="c-stat"><span class="c-val">281 Mg C</span><span class="c-lbl">Intact core carbon stock (ha⁻¹)</span></div>
+            <div class="c-stat"><span class="c-val">4–7 yrs</span><span class="c-lbl">MDI early warning lead time</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-card reveal">
+        <div class="c-banner"><div class="c-letter">B</div><div><div class="c-loc">📍 SE Australia · 127 plots · 2019–2020</div><div class="c-title">Black Summer Megafire: RRC and the Limits of Resilience</div></div></div>
+        <div class="c-body">
+          <p class="c-desc">Pre-fire SGH scores predicted post-fire recovery bimodality — validating that genetic diversity of serotinous traits determines whether forests recover or enter an alternative stable state.</p>
+          <div class="c-stats">
+            <div class="c-stat"><span class="c-val">18.6M ha</span><span class="c-lbl">Area burned</span></div>
+            <div class="c-stat"><span class="c-val">IBR &gt;0.72</span><span class="c-lbl">Recovery threshold</span></div>
+            <div class="c-stat"><span class="c-val">61%</span><span class="c-lbl">Biomass recovery (high-IBR, 24mo)</span></div>
+            <div class="c-stat"><span class="c-val">22%</span><span class="c-lbl">Recovery (low-IBR — alt. state)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-card reveal">
+        <div class="c-banner"><div class="c-letter">C</div><div><div class="c-loc">📍 Serengeti-Mara · 89 plots</div><div class="c-title">Serengeti Trophic Cascade: TMI as Food Web Forensics</div></div></div>
+        <div class="c-body">
+          <p class="c-desc">TMI network analysis reveals how apex predator loss triggers trophic simplification at landscape scales — not through direct predator-prey link loss but via second-order herbivore overgrazing effects.</p>
+          <div class="c-stats">
+            <div class="c-stat"><span class="c-val">0.823</span><span class="c-lbl">TMI with apex predators</span></div>
+            <div class="c-stat"><span class="c-val">0.621</span><span class="c-lbl">TMI without apex predators</span></div>
+            <div class="c-stat"><span class="c-val">L/S = 4.2</span><span class="c-lbl">Trophic linkage density (intact)</span></div>
+            <div class="c-stat"><span class="c-val">45%</span><span class="c-lbl">TMI links via second-order effects</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-card reveal">
+        <div class="c-banner"><div class="c-letter">D</div><div><div class="c-loc">📍 Arctic Tundra · 47 plots</div><div class="c-title">Arctic PTS: The Clock of Climate Change</div></div></div>
+        <div class="c-body">
+          <p class="c-desc">Most extreme PTS displacements in the dataset. Spring green-up advances 18.4 days ahead of migratory shorebird arrival — locked to photoperiod cues from African wintering grounds.</p>
+          <div class="c-stats">
+            <div class="c-stat"><span class="c-val">18.4 days</span><span class="c-lbl">Spring green-up advance</span></div>
+            <div class="c-stat"><span class="c-val">14.2 days</span><span class="c-lbl">Phenological mismatch gap</span></div>
+            <div class="c-stat"><span class="c-val">18–34%</span><span class="c-lbl">Chick survival reduction</span></div>
+            <div class="c-stat"><span class="c-val">5 of 6</span><span class="c-lbl">Shorebird species affected</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="pubs" class="sec-pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">Research &amp; Publications</span>
+      <h2 class="sec-title">Peer-reviewed research and <em>open datasets</em></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="pub-list">
+      <div class="pub-card reveal">
+        <div class="pub-year">2026</div>
+        <div><span class="pub-badge">Submitted · Nature Sustainability</span>
+          <div class="pub-title">BIOTICA: A Multi-Dimensional Bio-Geochemical Framework for the Systematic Assessment, Predictive Modeling, and Cosmological Contextualization of Ecosystem Resilience</div>
+          <div class="pub-venue">Nature Sustainability · Springer Nature · Comprehensive Review &amp; Original Research</div>
+          <a href="https://doi.org/10.14293/BIOTICA.2026.001" class="pub-doi">DOI: 10.14293/BIOTICA.2026.001</a>
+        </div>
+      </div>
+      <div class="pub-card reveal">
+        <div class="pub-year">2026</div>
+        <div><span class="pub-badge">Open Dataset · Zenodo</span>
+          <div class="pub-title">BIOTICA Classification Dataset: 3,412 Ecosystem Plots from 22 Biome Types, 6 Continents — IBR Scores, Nine-Parameter Measurements, and Validation Records</div>
+          <div class="pub-venue">Zenodo · CERN Data Centre · Open Access Dataset</div>
+          <a href="https://doi.org/10.5281/zenodo.biotica.2026" class="pub-doi">Zenodo Repository →</a>
+        </div>
+      </div>
+      <div class="pub-card reveal">
+        <div class="pub-year">In Review</div>
+        <div><span class="pub-badge">Preprint</span>
+          <div class="pub-title">Microbial Functional Diversity as a Predictor of Ecosystem Carbon Retention: Shotgun Metagenomics vs. Allometric Methods across 1,240 Plots</div>
+          <div class="pub-venue">Global Change Biology · Wiley</div>
+          <a href="https://gitlab.com/gitdeeper07/biotica" class="pub-doi">Preprint on GitLab →</a>
+        </div>
+      </div>
+      <div class="pub-card reveal">
+        <div class="pub-year">In Review</div>
+        <div><span class="pub-badge">Preprint</span>
+          <div class="pub-title">Critical Slowing-Down Signatures in Multi-Parameter IBR Time Series: 8–14 Month Early Warning for Ecosystem State Transitions Validated Across 67 Events</div>
+          <div class="pub-venue">Nature Climate Change · Springer Nature</div>
+          <a href="https://gitlab.com/gitdeeper07/biotica" class="pub-doi">Preprint on GitLab →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:1rem">
+      <span class="sec-eyebrow">Open Science · Open Source</span>
+      <h2 class="sec-title">Making four billion years of <em>biological history</em> legible</h2>
+      <p class="sec-desc">Access the research paper, open-source implementation, and full validation dataset. BIOTICA provides the cipher for living archives.</p>
+    </div>
+    <div class="cta-ctas reveal">
+      <a href="https://gitlab.com/gitdeeper07/biotica" class="btn btn-g">🦊 GitLab Repository</a>
+      <a href="https://github.com/gitdeeper07/biotica" class="btn btn-o">📦 GitHub Mirror</a>
+      <a href="https://doi.org/10.14293/BIOTICA.2026.001" class="btn btn-o">📄 Research Paper</a>
+      <a href="https://doi.org/10.5281/zenodo.biotica.2026" class="btn btn-gold">🗄️ Open Dataset</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand">BIOTI<span>CA</span> 🌿</div>
+      <p class="foot-tag">Four billion years of biological negotiation, encoded in soil and gene and trophic web.<br><strong style="color:var(--green-4);font-style:normal">BIOTICA makes it legible.</strong></p>
+    </div>
+    <div class="foot-col">
+      <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#parameters">Parameters</a></li>
+                    <li><a href="#ibr">IBR Levels</a></li>
+                    <li><a href="#case-studies">Case Studies</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="/dashboard">Live Dashboard</a></li>
+                    <li><a href="/reports">Generated Reports</a></li>
+                    <li><a href="/documentation">Documentation</a></li>
+                </ul>
+    </div>
+    <div class="foot-col">
+       <h3>Code Repositories</h3>
+                <ul>
+                    <li><a href="https://gitlab.com/biotica/biotica">GitLab (Primary)</a></li>
+                    <li><a href="https://github.com/biotica/biotica">GitHub (Mirror)</a></li>
+                    <li><a href="https://bitbucket.org/gitdeeper07/biotica">Bitbucket </a></li>
+                        <li><a href="https://codeberg.org/gitdeeper07/biotica">Codeberg (Backup)</a></li>
+                    <li><a href="https://pypi.org/project/biotica-ecosystem/1.0.0/">PyPI Package</a></li>
+                </ul>
+            </div>
+
+           
+    <div class="foot-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://zenodo.org/records/18745310">Research Paper (DOI)</a></li>
+        <li><a href="https://osf.io/h8vn3/overview">OSF Preregistration</a></li>
+        <li><a href="https://orcid.org/0009-0003-8903-0029">ORCID Profile</a></li>
+        <li><a href="https://gitlab.com/gitdeeper07/biotica/-/raw/main/README.md">Documentation</a></li>
+        <li><a href="https://www.gbif.org" tar>GBIF Data</a></li>
+        <li><a href="https://www.globalforestwatch.org">Global Forest Watch</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span class="foot-copy">Copyright © BIOTICA 🌿 2026 | All rights reserved</span>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i * 90);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+const secs = document.querySelectorAll('section[id],div[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 160) cur = s.id; });
+  links.forEach(a => { a.style.color = a.getAttribute('href') === `#${cur}` ? 'var(--green-4)' : ''; });
+});
+</script>
+</body>
+</html>

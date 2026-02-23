@@ -1,0 +1,21 @@
+{
+    "overall_trend": -0.05,
+    "trend_percentage": -6.4,
+    "acceleration": -0.02,
+    "seasonal_patterns": {
+        "spring": 0.82,
+        "summer": 0.75,
+        "autumn": 0.78,
+        "winter": 0.73
+    },
+    "hotspots": [
+        {"region": "southeast", "decline_rate": -8.2},
+        {"region": "northwest", "decline_rate": -3.1},
+        {"region": "central", "decline_rate": -2.5}
+    ],
+    "predictions": {
+        "next_month": 0.71,
+        "next_quarter": 0.68,
+        "next_year": 0.65
+    }
+}

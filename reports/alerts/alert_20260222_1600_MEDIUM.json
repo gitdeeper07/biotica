@@ -1,0 +1,10 @@
+{
+    "timestamp": "2026-02-22T16:00:00+00:00",
+    "severity": "MEDIUM",
+    "plot_id": "PLOT_123",
+    "ibr_score": 0.48,
+    "message": "Degradation detected - monitor closely",
+    "status": "new",
+    "recommendation": "Increase monitoring frequency",
+    "deadline": "2026-03-15"
+}

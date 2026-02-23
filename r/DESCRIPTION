@@ -1,0 +1,19 @@
+Package: biotica
+Title: Ecosystem Resilience Assessment Framework
+Version: 1.0.0
+Authors@R: person("Samir", "Baladi", email = "gitdeeper@gmail.com", role = c("aut", "cre"))
+Description: Provides functions for computing the Integrated Biotic Resilience (IBR) index,
+    detecting ecosystem tipping points, and analyzing ecological data.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: R (>= 3.5.0)
+Imports:
+    stats,
+    graphics
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown

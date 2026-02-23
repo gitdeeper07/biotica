@@ -1,0 +1,70 @@
+{
+  "site": {
+    "name": "METEORICA",
+    "url": "https://meteorica-science.netlify.app",
+    "doi": "10.14293/METEORICA.2026.001",
+    "version": "1.0.0",
+    "author": "Samir Baladi",
+    "email": "gitdeeper@gmail.com",
+    "orcid": "0009-0003-8903-0029"
+  },
+  "social": {
+    "gitlab": "https://gitlab.com/gitdeeper07/meteorica",
+    "github": "https://github.com/gitdeeper07/meteorica",
+    "pypi": "https://pypi.org/project/meteorica",
+    "huggingface": "https://huggingface.co/spaces/gitdeeper07/meteorica",
+    "zenodo": "https://doi.org/10.5281/zenodo.meteorica.2026"
+  },
+  "metrics": {
+    "emi_accuracy": 94.7,
+    "tests_passing": 40,
+    "test_total": 40,
+    "coverage": 95,
+    "specimens": 2847,
+    "repositories": 18
+  },
+  "parameters": [
+    {
+      "symbol": "MCC",
+      "name": "Mineralogical Classification Coefficient",
+      "weight": 0.26,
+      "status": "operational"
+    },
+    {
+      "symbol": "SMG",
+      "name": "Shock Metamorphism Grade",
+      "weight": 0.19,
+      "status": "operational"
+    },
+    {
+      "symbol": "TWI",
+      "name": "Terrestrial Weathering Index",
+      "weight": 0.18,
+      "status": "operational"
+    },
+    {
+      "symbol": "IAF",
+      "name": "Isotopic Anomaly Fingerprint",
+      "weight": 0.17,
+      "status": "operational"
+    },
+    {
+      "symbol": "ATP",
+      "name": "Ablation Thermal Profile",
+      "weight": 0.10,
+      "status": "operational"
+    },
+    {
+      "symbol": "PBDR",
+      "name": "Parent Body Differentiation Ratio",
+      "weight": 0.06,
+      "status": "operational"
+    },
+    {
+      "symbol": "CNEA",
+      "name": "Cosmogenic Nuclide Exposure Age",
+      "weight": 0.04,
+      "status": "operational"
+    }
+  ]
+}

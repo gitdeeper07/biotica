@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BIOTICA — Ecosystem Resilience Assessment Framework. Live dashboard for 25 monitoring sites with real-time IBR tracking.">
+    <meta name="keywords" content="BIOTICA, Ecosystem Dashboard, IBR, Resilience, Environmental Monitoring">
+    <meta name="author" content="Samir Baladi">
+    <title>🌿 BIOTICA — Live Ecosystem Dashboard</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --void: #03020A;
+            --deep: #08061A;
+            --nebula: #0D0B2A;
+            --panel: #110F30;
+            --rim: #1C1840;
+            --green: #2E8B57;
+            --green-dim: #1D5A3E;
+            --green-pale: rgba(46,139,87,0.12);
+            --teal: #1EDFC8;
+            --teal-dim: rgba(30,223,200,0.15);
+            --amber: #E8A020;
+            --amber-dim: #A06A10;
+            --star: #F0EDE8;
+            --muted: #8A86A0;
+            --border: rgba(255,255,255,0.06);
+            --pristine: #2E8B57;
+            --functional: #4682B4;
+            --impaired: #CD5C5C;
+            --degraded: #DAA520;
+            --collapsed: #8B0000;
+            --shadow: rgba(0,0,0,0.5);
+        }
+        
+        body {
+            font-family: 'Space Mono', 'DM Sans', monospace;
+            line-height: 1.6;
+            color: var(--star);
+            background: var(--void);
+            overflow-x: hidden;
+        }
+
+        #starfield {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+        #starfield canvas { display: block; }
+
+        .navbar {
+            background: rgba(3,2,10,0.92);
+            backdrop-filter: blur(18px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--green);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--green);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--star);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--void) 0%, var(--deep) 50%, var(--nebula) 100%);
+            color: var(--star);
+            padding: 120px 2rem 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero::before {
+            content: '🌿';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.03;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge {
+            background: rgba(46,139,87,0.1);
+            color: var(--green);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--green-dim);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--teal);
+            font-weight: 400;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: var(--muted);
+        }
+
+        .dashboard-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--panel);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            border-bottom: 3px solid var(--green-dim);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, border-color 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-bottom-color: var(--green);
+            background: var(--rim);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(46,139,87,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--green);
+        }
+
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--star);
+            line-height: 1;
+        }
+
+        .stat-unit {
+            font-size: 0.9rem;
+            color: var(--teal);
+            margin-left: 5px;
+        }
+
+        .map-section {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            height: 500px;
+            background: var(--deep);
+        }
+
+        #ecosystem-map {
+            width: 100%;
+            height: 100%;
+            background: var(--deep);
+        }
+
+        .stats-panel {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--green);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .site-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .site-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(46,139,87,0.05);
+            border-radius: 8px;
+            transition: transform 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .site-item:hover {
+            background: rgba(46,139,87,0.1);
+            transform: translateX(5px);
+        }
+
+        .site-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .site-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .site-ibr {
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .pristine-dot { background: var(--pristine); }
+        .functional-dot { background: var(--functional); }
+        .impaired-dot { background: var(--impaired); }
+        .degraded-dot { background: var(--degraded); }
+        .collapsed-dot { background: var(--collapsed); }
+
+        .ibr-container {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .slider-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .time-label {
+            background: rgba(46,139,87,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: var(--green);
+            font-weight: 600;
+            border: 1px solid var(--green-dim);
+        }
+
+        .ibr-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--teal);
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(30,223,200,0.05);
+            border-radius: 8px;
+            border: 1px solid var(--teal-dim);
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, var(--pristine) 0%, var(--functional) 25%, var(--impaired) 50%, var(--degraded) 75%, var(--collapsed) 100%);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--star);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--green);
+            box-shadow: 0 0 15px var(--green);
+            transition: 0.2s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .slider-labels span:nth-child(1) { color: var(--pristine); }
+        .slider-labels span:nth-child(2) { color: var(--functional); }
+        .slider-labels span:nth-child(3) { color: var(--impaired); }
+        .slider-labels span:nth-child(4) { color: var(--degraded); }
+        .slider-labels span:nth-child(5) { color: var(--collapsed); }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .chart-title i {
+            color: var(--green);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 250px !important;
+        }
+
+        .params-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px;
+        }
+
+        .params-title {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--green);
+            font-family: 'Syne', sans-serif;
+        }
+
+        .params-title i {
+            color: var(--teal);
+        }
+
+        .params-count {
+            background: var(--panel);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--star);
+            border: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .param-card {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            border-left: 6px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .param-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: var(--rim);
+        }
+
+        .param-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .param-card:hover::before {
+            opacity: 1;
+        }
+
+        .param-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .param-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--green);
+            font-family: 'Syne', sans-serif;
+        }
+
+        .param-weight {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            background: rgba(46,139,87,0.1);
+            border-radius: 20px;
+            color: var(--green);
+            border: 1px solid var(--green-dim);
+        }
+
+        .param-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .param-desc {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .param-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--teal);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--muted);
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--void);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--green-dim);
+            border-radius: 50%;
+            border-top-color: var(--green);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            background: var(--deep);
+            color: var(--muted);
+            padding: 60px 2rem 30px;
+            border-top: 2px solid var(--green-dim);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--green);
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p { 
+            font-size: 0.9rem; 
+            line-height: 1.8;
+            color: var(--muted);
+        }
+
+        .footer-section ul { list-style: none; }
+
+        .footer-section ul li { margin-bottom: 0.5rem; }
+
+        .footer-section ul li a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover { color: var(--green); }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            color: var(--muted);
+        }
+
+        .footer-bottom a { 
+            color: var(--green); 
+            text-decoration: none; 
+            transition: color 0.3s;
+        }
+
+        .footer-bottom a:hover { color: var(--teal); }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2,1fr); }
+            .map-section { grid-template-columns: 1fr; }
+            .charts-section { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { 
+                display: none; 
+                position: absolute; 
+                top: 100%; 
+                left: 0; 
+                right: 0; 
+                background: var(--deep); 
+                flex-direction: column; 
+                padding: 1rem 0; 
+                gap: 0; 
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { padding: 0.7rem 2rem; }
+            .hero h1 { font-size: 2rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .footer-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="error-display" style="display: none; position: fixed; top: 0; left: 0; right: 0; background: #CD5C5C; color: #03020A; padding: 15px; text-align: center; z-index: 10000; font-family: monospace; border-bottom: 3px solid #2E8B57;"></div>
+
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <p style="color: var(--green);">Connecting to BIOTICA Database...</p>
+    </div>
+
+    <div id="starfield"><canvas id="stars"></canvas></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">🌿 BIOTICA</a>
+            <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="#parameters">Parameters</a></li>
+                <li><a href="#ibr">IBR Levels</a></li>
+                <li><a href="#case-studies">Case Studies</a></li>
+                <li><a href="#publications">Publications</a></li>
+                <li><a href="/dashboard" class="active">📊 Live Dashboard</a></li>
+                <li><a href="/documentation">📚 Documentation</a></li>
+                <li><a href="/reports">📑 Reports</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge"><i class="fas fa-leaf"></i> <span id="liveStatus">BIOTICA • <span id="total-sites-display">0</span> SITES • <span id="active-alerts-display">0</span> ALERTS • LIVE</span></div>
+            <h1>🌿 Ecosystem Resilience<br>Live Monitoring Dashboard</h1>
+            <p class="subtitle">Real-time IBR classification and ecosystem health tracking</p>
+            <p>Monitoring <span id="totalSitesCount" style="color: var(--green); font-weight: 700;">0</span> sites • Mean IBR: <span id="systemIBR" style="color: var(--green);">0.00</span></p>
+        </div>
+    </section>
+
+    <div class="dashboard-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="stat-info">
+                    <h3>Total Sites</h3>
+                    <div><span class="stat-number" id="totalSites">0</span><span class="stat-unit">locations</span></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-info">
+                    <h3>Critical Alerts</h3>
+                    <div><span class="stat-number" id="criticalAlerts">0</span><span class="stat-unit">active</span></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-info">
+                    <h3>Mean IBR</h3>
+                    <div><span class="stat-number" id="meanIBR">0.00</span><span class="stat-unit">/1.00</span></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-globe-americas"></i></div>
+                <div class="stat-info">
+                    <h3>Recovery Rate</h3>
+                    <div><span class="stat-number" id="recoveryRate">100</span><span class="stat-unit">%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <div class="map-container">
+                <div id="ecosystem-map"></div>
+            </div>
+            <div class="stats-panel">
+                <div class="panel-title"><i class="fas fa-exclamation-circle"></i> Critical Sites & Alerts</div>
+                <div class="site-stats" id="criticalSitesList">
+                    <div class="loading">Loading data from database...</div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--muted);">Last Update:</span>
+                        <span style="color: var(--teal);" id="lastUpdate"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--muted);">Data Source:</span>
+                        <span style="color: var(--teal);">BIOTICA Database v1.0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--muted);">API Endpoint:</span>
+                        <span style="color: var(--teal);" id="apiEndpoint">https://api.biotica.org/v1/sites</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ibr-container">
+            <div class="slider-header">
+                <div class="slider-title"><i class="fas fa-chart-line"></i> <span>IBR Classification Threshold</span></div>
+                <span class="time-label" id="ibrLevelLabel">FUNCTIONAL</span>
+            </div>
+            <input type="range" id="ibrSlider" min="0" max="1" value="0.6" step="0.01">
+            <div class="slider-labels">
+                <span>PRISTINE</span><span>FUNCTIONAL</span><span>IMPAIRED</span><span>DEGRADED</span><span>COLLAPSED</span>
+            </div>
+            <div class="ibr-display" id="ibrDisplay">
+                Showing sites with IBR <span id="ibrThreshold">0.60</span>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-title"><i class="fas fa-chart-pie"></i> IBR Classification Distribution</div>
+                <canvas id="ibrChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title"><i class="fas fa-chart-bar"></i> Top 5 Critical Sites</div>
+                <canvas id="criticalChart"></canvas>
+            </div>
+        </div>
+
+        <div class="params-header">
+            <h2 class="params-title"><i class="fas fa-microscope"></i> Nine BIOTICA Parameters</h2>
+            <span class="params-count" id="activeParamsCount">9/9 Active</span>
+        </div>
+        <div id="paramsContainer" class="params-grid">
+            <div class="loading">Loading parameters from database...</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🌿 BIOTICA</h3>
+                <p>Bio-Geochemical Framework for Ecosystem Resilience Assessment. Real-time monitoring of ecosystem health across 25 sites.</p>
+                <p style="margin-top:1rem; font-size:0.82rem; opacity:0.5;">Version 1.0.0 · MIT License</p>
+                <p style="font-size:0.82rem; opacity:0.5;">ORCID: 0009-0003-8903-0029</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#parameters">Parameters</a></li>
+                    <li><a href="#ibr">IBR Levels</a></li>
+                    <li><a href="#case-studies">Case Studies</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="/dashboard">Live Dashboard</a></li>
+                    <li><a href="/reports">Generated Reports</a></li>
+                    <li><a href="/documentation">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+               <h3>Code Repositories</h3>
+                <ul>
+                     <li><a href="https://gitlab.com/biotica/biotica">GitLab (Primary)</a></li>
+                    <li><a href="https://github.com/biotica/biotica">GitHub (Mirror)</a></li>
+                    <li><a href="https://bitbucket.org/gitdeeper07/biotica">Bitbucket </a></li>
+                        <li><a href="https://codeberg.org/gitdeeper07/biotica">Codeberg (Backup)</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+      <ul>
+       <li><a href="https://pypi.org/project/biotica-ecosystem/1.0.0/">PyPI Package</a></li>
+        <li><a href="https://zenodo.org/records/18745310">Research Paper (DOI)</a></li>
+        <li><a href="https://osf.io/h8vn3/overview">OSF Preregistration</a></li>
+        <li><a href="https://orcid.org/0009-0003-8903-0029">ORCID Profile</a></li>
+        <li><a href="https://gitlab.com/gitdeeper07/biotica/-/raw/main/README.md">Documentation</a></li>
+        <li><a href="https://www.gbif.org" tar>GBIF Data</a></li>
+        <li><a href="https://www.globalforestwatch.org">Global Forest Watch</a></li>
+      </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>Copyright © BIOTICA 🌿 2026 | All rights reserved</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // BIOTICA Dashboard JavaScript
+        let map, markers = [], ibrChart, criticalChart;
+        let allSites = [];
+        let currentIBR = 0.6;
+
+        // API Configuration
+        const API_BASE_URL = 'https://api.biotica.org/v1';
+        const USE_MOCK_DATA = true; // Set to false when real API is available
+
+        window.onerror = function(msg, url, line) {
+            console.error('🚨 JavaScript Error:', msg, 'at line', line);
+            const errorDiv = document.getElementById('error-display');
+            if (errorDiv) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = `<strong>🌿 BIOTICA Error:</strong> ${msg}`;
+            }
+            return false;
+        };
+
+        // Safe UI update function
+        function safeUpdate(elementId, value, useHTML = false) {
+            try {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    if (useHTML) {
+                        element.innerHTML = value;
+                    } else {
+                        element.innerText = value;
+                    }
+                } else {
+                    console.warn(`⚠️ Element #${elementId} not found`);
+                }
+            } catch (e) {
+                console.error(`Error updating #${elementId}:`, e);
+            }
+        }
+
+        function showError(message) {
+            console.error('❌', message);
+            safeUpdate('error-display', message);
+        }
+
+        function showStatus(message, type = 'info') {
+            console.log(`📢 [${type}]`, message);
+        }
+
+        function waitForLeaflet() {
+            return new Promise((resolve) => {
+                if (typeof L !== 'undefined' && L.Map) {
+                    resolve();
+                } else {
+                    setTimeout(() => waitForLeaflet().then(resolve), 100);
+                }
+            });
+        }
+
+        async function initMap() {
+            try {
+                await waitForLeaflet();
+                
+                const mapInstance = L.map('ecosystem-map', {
+                    center: [20, 0],
+                    zoom: 2,
+                    zoomControl: true
+                });
+
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '©CARTO',
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    minZoom: 2
+                }).addTo(mapInstance);
+
+                const legend = L.control({ position: 'bottomright' });
+                legend.onAdd = function() {
+                    const div = L.DomUtil.create('div', 'info legend');
+                    div.style.cssText = 'background:var(--panel); padding:12px; border-radius:8px; border:1px solid var(--border); color:var(--star); font-family: "Space Mono", monospace; font-size:12px;';
+                    div.innerHTML = 
+                        '<h4 style="margin:0 0 10px 0; color:var(--green); font-family: "Syne", sans-serif;">🌿 IBR Levels</h4>' +
+                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="background:#2E8B57; width:12px; height:12px; border-radius:50%; display:inline-block;"></span> PRISTINE (>0.88)</div>' +
+                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="background:#4682B4; width:12px; height:12px; border-radius:50%; display:inline-block;"></span> FUNCTIONAL (0.75-0.88)</div>' +
+                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="background:#CD5C5C; width:12px; height:12px; border-radius:50%; display:inline-block;"></span> IMPAIRED (0.60-0.75)</div>' +
+                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="background:#DAA520; width:12px; height:12px; border-radius:50%; display:inline-block;"></span> DEGRADED (0.45-0.60)</div>' +
+                        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;"><span style="background:#8B0000; width:12px; height:12px; border-radius:50%; display:inline-block;"></span> COLLAPSED (<0.45)</div>';
+                    return div;
+                };
+                legend.addTo(mapInstance);
+                
+                showStatus('✅ Map initialized successfully');
+                return mapInstance;
+                
+            } catch (error) {
+                showError(`Map initialization failed: ${error.message}`);
+                return null;
+            }
+        }
+
+        function updateMap(sites) {
+            if (!map) return;
+            
+            try {
+                markers.forEach(m => map.removeLayer(m));
+                markers = [];
+                
+                sites.forEach(s => {
+                    if (!s.lat || !s.lng) return;
+                    
+                    let color = getClassificationColor(s.classification);
+                    let marker = L.circleMarker([s.lat, s.lng], { 
+                        radius: 6 + (s.ibr * 10), 
+                        fillColor: color, 
+                        color: '#fff', 
+                        weight: 1, 
+                        fillOpacity: 0.8 
+                    }).addTo(map);
+                    
+                    marker.bindPopup(`<div style="padding:12px; background:var(--panel); color:var(--star); font-family: 'Space Mono', monospace;">
+                        <h3 style="color:${color}; margin:0 0 8px 0; font-family: 'Syne', sans-serif;">🌿 ${s.name}</h3>
+                        <p style="margin:4px 0;"><strong>Location:</strong> ${s.location || 'Unknown'}</p>
+                        <p style="margin:4px 0;"><strong>IBR:</strong> ${s.ibr.toFixed(2)}</p>
+                        <p style="margin:4px 0;"><strong>Status:</strong> ${s.classification}</p>
+                        ${s.alert ? '<p style="margin:4px 0; color:#CD5C5C;"><strong>⚠️ ALERT:</strong> ' + s.alert + '</p>' : ''}
+                    </div>`);
+                    
+                    markers.push(marker);
+                });
+                
+                if (markers.length && L.featureGroup(markers).getBounds().isValid()) {
+                    map.fitBounds(L.featureGroup(markers).getBounds().pad(0.1));
+                }
+            } catch (error) {
+                showError(`Map update failed: ${error.message}`);
+            }
+        }
+
+        async function fetchSites() {
+            if (!USE_MOCK_DATA) {
+                try {
+                    showStatus('Fetching sites from API...');
+                    const response = await fetch(`${API_BASE_URL}/sites`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    showStatus(`✅ Loaded ${data.length} sites from API`);
+                    return data;
+                } catch (error) {
+                    showError(`API connection failed: ${error.message}. Using mock data.`);
+                    return generateMockData();
+                }
+            } else {
+                showStatus('⚠️ Using mock data (API connection disabled)');
+                return generateMockData();
+            }
+        }
+
+        function generateMockData() {
+            return [
+                { id: 'PLOT_001', name: 'Amazon Rainforest', location: 'Brazil', lat: -3.465, lng: -62.215, ibr: 0.92, classification: 'PRISTINE', alert: null },
+                { id: 'PLOT_002', name: 'Congo Basin', location: 'DRC', lat: 0.0, lng: 25.0, ibr: 0.88, classification: 'PRISTINE', alert: null },
+                { id: 'PLOT_003', name: 'Borneo Forest', location: 'Indonesia', lat: 0.0, lng: 114.0, ibr: 0.85, classification: 'PRISTINE', alert: null },
+                { id: 'PLOT_004', name: 'Siberian Taiga', location: 'Russia', lat: 60.0, lng: 100.0, ibr: 0.82, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_005', name: 'Canadian Boreal', location: 'Canada', lat: 55.0, lng: -110.0, ibr: 0.80, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_006', name: 'Great Plains', location: 'USA', lat: 40.0, lng: -100.0, ibr: 0.79, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_007', name: 'Mongolian Steppe', location: 'Mongolia', lat: 46.0, lng: 105.0, ibr: 0.77, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_008', name: 'Australian Outback', location: 'Australia', lat: -25.0, lng: 135.0, ibr: 0.76, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_009', name: 'Patagonian Steppe', location: 'Argentina', lat: -45.0, lng: -70.0, ibr: 0.75, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_010', name: 'Sahara Desert', location: 'Algeria', lat: 25.0, lng: 5.0, ibr: 0.45, classification: 'DEGRADED', alert: 'Drought conditions' },
+                { id: 'PLOT_011', name: 'Gobi Desert', location: 'Mongolia', lat: 43.0, lng: 107.0, ibr: 0.48, classification: 'DEGRADED', alert: 'Desertification' },
+                { id: 'PLOT_012', name: 'Atacama Desert', location: 'Chile', lat: -24.0, lng: -69.0, ibr: 0.49, classification: 'DEGRADED', alert: 'Extreme aridity' },
+                { id: 'PLOT_013', name: 'Everglades', location: 'USA', lat: 25.5, lng: -80.8, ibr: 0.71, classification: 'IMPAIRED', alert: 'Water pollution' },
+                { id: 'PLOT_014', name: 'Danube Delta', location: 'Romania', lat: 45.0, lng: 29.0, ibr: 0.68, classification: 'IMPAIRED', alert: 'Eutrophication' },
+                { id: 'PLOT_015', name: 'Mekong Delta', location: 'Vietnam', lat: 10.0, lng: 106.0, ibr: 0.65, classification: 'IMPAIRED', alert: 'Agricultural runoff' },
+                { id: 'PLOT_016', name: 'Alps Mountain', location: 'Switzerland', lat: 46.5, lng: 8.5, ibr: 0.73, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_017', name: 'Himalayas', location: 'Nepal', lat: 28.0, lng: 85.0, ibr: 0.72, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_018', name: 'Andes Mountains', location: 'Peru', lat: -9.0, lng: -77.0, ibr: 0.70, classification: 'IMPAIRED', alert: 'Glacial retreat' },
+                { id: 'PLOT_019', name: 'Great Barrier Reef', location: 'Australia', lat: -18.0, lng: 147.0, ibr: 0.62, classification: 'IMPAIRED', alert: 'Coral bleaching' },
+                { id: 'PLOT_020', name: 'Coral Triangle', location: 'Indonesia', lat: -5.0, lng: 125.0, ibr: 0.58, classification: 'DEGRADED', alert: 'Overfishing' },
+                { id: 'PLOT_021', name: 'Mangroves - Sundarbans', location: 'Bangladesh', lat: 21.5, lng: 89.0, ibr: 0.69, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_022', name: 'Amazon River', location: 'Brazil', lat: -3.0, lng: -60.0, ibr: 0.74, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_023', name: 'Congo River', location: 'DRC', lat: -2.0, lng: 16.0, ibr: 0.71, classification: 'IMPAIRED', alert: 'Pollution' },
+                { id: 'PLOT_024', name: 'Lake Baikal', location: 'Russia', lat: 53.5, lng: 108.0, ibr: 0.78, classification: 'FUNCTIONAL', alert: null },
+                { id: 'PLOT_025', name: 'Great Lakes', location: 'USA/Canada', lat: 44.0, lng: -87.0, ibr: 0.70, classification: 'IMPAIRED', alert: 'Algal blooms' }
+            ];
+        }
+
+        function getClassificationColor(classification) {
+            switch(classification) {
+                case 'PRISTINE': return '#2E8B57';
+                case 'FUNCTIONAL': return '#4682B4';
+                case 'IMPAIRED': return '#CD5C5C';
+                case 'DEGRADED': return '#DAA520';
+                case 'COLLAPSED': return '#8B0000';
+                default: return '#8A86A0';
+            }
+        }
+
+        function getIBRLevel(ibr) {
+            if (ibr > 0.88) return 'PRISTINE';
+            if (ibr > 0.75) return 'FUNCTIONAL';
+            if (ibr > 0.60) return 'IMPAIRED';
+            if (ibr > 0.45) return 'DEGRADED';
+            return 'COLLAPSED';
+        }
+
+        function updateUI() {
+            try {
+                let threshold = currentIBR;
+                safeUpdate('ibrThreshold', threshold.toFixed(2));
+                safeUpdate('ibrLevelLabel', getIBRLevel(threshold));
+
+                // Filter sites by threshold
+                let filteredSites = allSites.filter(s => s.ibr <= threshold);
+                
+                // Get critical sites (DEGRADED and COLLAPSED)
+                let criticalSites = allSites.filter(s => 
+                    s.classification === 'DEGRADED' || s.classification === 'COLLAPSED'
+                );
+                
+                // Update critical sites list
+                safeUpdate('criticalSitesList', 
+                    criticalSites.sort((a,b) => b.ibr - a.ibr)
+                    .slice(0, 10)
+                    .map(s => {
+                        let color = getClassificationColor(s.classification);
+                        return `<div class="site-item">
+                            <span class="site-name"><span class="site-dot" style="background:${color};"></span> ${s.name}</span>
+                            <span class="site-ibr" style="color:${color};">${s.classification} • IBR: ${s.ibr.toFixed(2)}</span>
+                        </div>`;
+                    }).join(''), 
+                    true
+                );
+                
+                // Count classifications
+                let counts = { 
+                    'PRISTINE':0, 'FUNCTIONAL':0, 'IMPAIRED':0, 'DEGRADED':0, 'COLLAPSED':0 
+                };
+                
+                allSites.forEach(s => {
+                    if (counts.hasOwnProperty(s.classification)) counts[s.classification]++;
+                });
+                
+                // Update stats
+                safeUpdate('totalSites', allSites.length);
+                safeUpdate('total-sites-display', allSites.length);
+                safeUpdate('criticalAlerts', criticalSites.length);
+                safeUpdate('totalSitesCount', allSites.length);
+                safeUpdate('active-alerts-display', criticalSites.length);
+                
+                let meanIBR = (allSites.reduce((sum, s) => sum + s.ibr, 0) / allSites.length).toFixed(2);
+                safeUpdate('meanIBR', meanIBR);
+                safeUpdate('systemIBR', meanIBR);
+                safeUpdate('recoveryRate', '100');
+                safeUpdate('lastUpdate', new Date().toLocaleString());
+                
+                // Update charts
+                if (ibrChart) ibrChart.destroy();
+                const ctx1 = document.getElementById('ibrChart')?.getContext('2d');
+                if (ctx1) {
+                    ibrChart = new Chart(ctx1, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['PRISTINE', 'FUNCTIONAL', 'IMPAIRED', 'DEGRADED', 'COLLAPSED'],
+                            datasets: [{
+                                data: [counts['PRISTINE'], counts['FUNCTIONAL'], counts['IMPAIRED'], counts['DEGRADED'], counts['COLLAPSED']],
+                                backgroundColor: ['#2E8B57', '#4682B4', '#CD5C5C', '#DAA520', '#8B0000'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            plugins: { 
+                                legend: { position: 'bottom', labels: { color: 'var(--muted)' } } 
+                            } 
+                        }
+                    });
+                }
+                
+                let top5 = [...allSites]
+                    .filter(s => s.classification === 'DEGRADED' || s.classification === 'COLLAPSED')
+                    .sort((a,b) => b.ibr - a.ibr).slice(0, 5);
+                
+                if (criticalChart) criticalChart.destroy();
+                const ctx2 = document.getElementById('criticalChart')?.getContext('2d');
+                if (ctx2) {
+                    criticalChart = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: top5.map(s => s.name.split(' ')[0]),
+                            datasets: [{
+                                label: 'IBR Score',
+                                data: top5.map(s => s.ibr),
+                                backgroundColor: top5.map(s => getClassificationColor(s.classification)),
+                                borderRadius: 8
+                            }]
+                        },
+                        options: { 
+                            responsive: true, 
+                            scales: { 
+                                y: { beginAtZero: true, max: 1, grid: { color: 'var(--border)' }, ticks: { color: 'var(--muted)' } }, 
+                                x: { ticks: { color: 'var(--muted)' } } 
+                            }, 
+                            plugins: { legend: { display: false } } 
+                        }
+                    });
+                }
+                
+                // Update parameters
+                const parametersData = [
+                    { symbol: 'VCA', name: 'Vegetative Carbon Absorption', weight: 20, value: 0.85, desc: 'Measures carbon uptake by vegetation. Key indicator of primary productivity.', color: '#2E8B57' },
+                    { symbol: 'MDI', name: 'Microbial Diversity Index', weight: 15, value: 0.78, desc: 'Soil microbial diversity. Early warning indicator of soil health.', color: '#4682B4' },
+                    { symbol: 'PTS', name: 'Phenological Time Shift', weight: 12, value: 0.72, desc: 'Changes in seasonal timing. Critical for climate change impact assessment.', color: '#CD5C5C' },
+                    { symbol: 'HFI', name: 'Hydrological Flux Index', weight: 11, value: 0.68, desc: 'Water flow and availability. Essential for drought prediction.', color: '#1EDFC8' },
+                    { symbol: 'BNC', name: 'Biogeochemical Nutrient Cycle', weight: 10, value: 0.70, desc: 'Nutrient cycling efficiency. Indicates soil fertility and sustainability.', color: '#DAA520' },
+                    { symbol: 'SGH', name: 'Species Genetic Heterogeneity', weight: 9, value: 0.65, desc: 'Genetic diversity within species. Resilience to environmental change.', color: '#9B59B6' },
+                    { symbol: 'AES', name: 'Anthropogenic Encroachment', weight: 8, value: 0.82, desc: 'Human impact score. Higher values indicate less disturbance.', color: '#E67E22' },
+                    { symbol: 'TMI', name: 'Trophic Metadata Integration', weight: 8, value: 0.71, desc: 'Food web complexity. Ecosystem stability indicator.', color: '#3498DB' },
+                    { symbol: 'RRC', name: 'Regenerative Recovery Capacity', weight: 7, value: 0.63, desc: 'Ecosystem recovery potential after disturbance.', color: '#E74C3C' }
+                ];
+                
+                document.getElementById('paramsContainer').innerHTML = parametersData.map(p => {
+                    return `<div class="param-card" style="border-left-color:${p.color};">
+                        <div class="param-header">
+                            <span class="param-name"><i class="fas fa-microscope"></i> ${p.symbol}</span>
+                            <span class="param-weight">Weight: ${p.weight}%</span>
+                        </div>
+                        <div class="param-value" style="color:${p.color};">${p.value.toFixed(2)}</div>
+                        <p class="param-desc">${p.desc}</p>
+                        <div class="param-details">
+                            <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">Active</span></div>
+                            <div class="detail-item"><span class="detail-label">Contribution</span><span class="detail-value">${p.weight}% of IBR</span></div>
+                        </div>
+                    </div>`;
+                }).join('');
+                
+                updateMap(filteredSites);
+                
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 500);
+                
+                showStatus('✅ Dashboard updated successfully');
+                
+            } catch (error) {
+                showError(`UI update failed: ${error.message}`);
+            }
+        }
+
+        window.toggleMenu = () => document.getElementById('navLinks').classList.toggle('active');
+
+        // Starfield animation
+        (function() {
+            try {
+                const canvas = document.getElementById('stars');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let stars = [];
+
+                function resize() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+
+                function initStars() {
+                    stars = [];
+                    const count = Math.floor((canvas.width * canvas.height) / 3000);
+                    for (let i = 0; i < count; i++) {
+                        stars.push({ 
+                            x: Math.random() * canvas.width, 
+                            y: Math.random() * canvas.height, 
+                            r: Math.random() * 1.2, 
+                            a: Math.random(), 
+                            speed: 0.0003 + Math.random() * 0.0005 
+                        });
+                    }
+                }
+
+                let t = 0;
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    stars.forEach(s => {
+                        s.a = 0.3 + 0.7 * Math.abs(Math.sin(t * s.speed * 1000));
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(240,237,232,${s.a})`;
+                        ctx.fill();
+                    });
+                    t += 0.016;
+                    requestAnimationFrame(draw);
+                }
+
+                resize(); initStars(); draw();
+                window.addEventListener('resize', () => { resize(); initStars(); });
+            } catch (error) { console.error('Starfield error:', error); }
+        })();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            showStatus('🚀 Initializing BIOTICA dashboard...');
+            
+            map = await initMap();
+            allSites = await fetchSites();
+            updateUI();
+            
+            const badge = document.querySelector('.badge');
+            if (badge) badge.innerHTML = '<i class="fas fa-check-circle" style="color: #2E8B57;"></i> BIOTICA • LIVE • Connected to Database';
+            
+            const ibrSlider = document.getElementById('ibrSlider');
+            if (ibrSlider) {
+                console.log('✅ IBR slider found');
+                ibrSlider.addEventListener('input', function(e) {
+                    currentIBR = parseFloat(e.target.value);
+                    updateUI();
+                });
+            } else {
+                console.error('❌ IBR slider not found');
+            }
+
+            // Test API connection if enabled
+            if (!USE_MOCK_DATA) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/health`);
+                    if (response.ok) {
+                        showStatus('✅ API connection successful');
+                        safeUpdate('apiEndpoint', `${API_BASE_URL} (connected)`);
+                    }
+                } catch (error) {
+                    showError(`API health check failed: ${error.message}`);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

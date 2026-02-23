@@ -1,0 +1,49 @@
+---
+output: github_document
+---
+
+# BIOTICA R Package
+
+[![CRAN status](https://www.r-pkg.org/badges/version/biotica)](https://CRAN.R-project.org/package=biotica)
+[![R-CMD-check](https://github.com/biotica/biotica/workflows/R-CMD-check/badge.svg)](https://github.com/biotica/biotica/actions)
+
+R package for BIOTICA statistical analysis.
+
+## Installation
+
+```r
+# From CRAN (when available)
+install.packages("biotica")
+
+# From source
+install.packages("path/to/biotica", repos = NULL, type = "source")
+```
+
+Usage
+
+```r
+library(biotica)
+
+# Compute IBR
+params <- list(VCA = 0.85, MDI = 0.78, PTS = 0.82)
+result <- ibr_composite(params)
+print(result)
+
+# Detect tipping points
+ts <- cumsum(rnorm(200))
+tipping <- tipping_points(ts, window = 30)
+print(tipping)
+```
+
+Functions
+
+· ibr_composite(): Compute IBR index
+· bayesian_weights(): Estimate Bayesian weights
+· tipping_points(): Detect tipping points
+· food_web_analysis(): Analyze food webs
+· plot_ibr(): Plot IBR results
+· validate_parameters(): Validate parameters
+
+License
+
+MIT © Samir Baladi

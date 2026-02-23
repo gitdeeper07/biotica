@@ -1,0 +1,32 @@
+====================================
+BIOTICA DAILY REPORT
+Date: $(date +%Y-%m-%d)
+====================================
+
+SUMMARY
+--------
+Total plots analyzed: {total_plots}
+Average IBR: {avg_ibr}
+Min IBR: {min_ibr}
+Max IBR: {max_ibr}
+Alert count: {alert_count}
+
+CLASSIFICATION DISTRIBUTION
+---------------------------
+PRISTINE   : {pristine_count} ({pristine_pct}%)
+FUNCTIONAL : {functional_count} ({functional_pct}%)
+IMPAIRED   : {impaired_count} ({impaired_pct}%)
+DEGRADED   : {degraded_count} ({degraded_pct}%)
+COLLAPSED  : {collapsed_count} ({collapsed_pct}%)
+
+ALERTS
+-------
+{alerts_list}
+
+STATISTICS
+-----------
+Mean IBR: {mean_ibr}
+Std Dev: {std_ibr}
+Median: {median_ibr}
+
+====================================

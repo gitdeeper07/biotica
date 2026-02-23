@@ -1,0 +1,13 @@
+# BIOTICA Reports Cron Jobs
+
+# Daily report at 23:59
+59 23 * * * cd /path/to/biotica && ./reports/generate_report.sh daily
+
+# Weekly report on Sunday at 23:59
+59 23 * * 0 cd /path/to/biotica && ./reports/generate_report.sh weekly
+
+# Monthly report on last day at 23:59
+59 23 28-31 * * [ "$(date +\%d -d tomorrow)" == "01" ] && cd /path/to/biotica && ./reports/generate_report.sh monthly
+
+# Archive old reports monthly on 1st at 00:00
+0 0 1 * * cd /path/to/biotica && ./reports/generate_report.sh archive

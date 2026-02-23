@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use BIOTICA in your research, please cite it as below."
+title: "BIOTICA: A Comprehensive Framework for Biotechnology Research and Analysis"
+authors:
+  - family-names: "Baladi"
+    given-names: "Samir"
+    email: "gitdeeper@gmail.com"
+    orcid: "https://orcid.org/0009-0003-8903-0029"
+    affiliation: "Ronin Institute / Rite of Renaissance - Biotechnology Division"
+version: 1.0.0
+doi: 10.xxxx/BIOTICA.2026.001
+date-released: 2026-03
+repository-code: "https://gitlab.com/biotica/biotica"
+url: "https://biotica.gitlab.io"
+license: "MIT"
+keywords:
+  - "biotechnology"
+  - "bioinformatics"
+  - "protein engineering"
+  - "genomics"
+  - "molecular biology"
+  - "systems biology"
+  - "AI classification"
+  - "sequence analysis"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Baladi"
+      given-names: "Samir"
+  title: "BIOTICA: A Comprehensive Framework for Biotechnology Research and Analysis"
+  journal: "Journal of Open Source Biology"
+  publisher: "Open Science Foundation"
+  year: 2026
+  doi: 10.xxxx/BIOTICA.2026.001

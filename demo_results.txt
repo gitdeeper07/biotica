@@ -1,0 +1,42 @@
+============================================================
+🌿 BIOTICA - Ecosystem Analysis Results
+============================================================
+Date: 2026-02-22
+Total Ecosystems Analyzed: 8
+
+SUMMARY STATISTICS:
+------------------
+Average IBR: 0.682
+Classification Distribution:
+  • PRISTINE  : 1 (12.5%)
+  • FUNCTIONAL: 3 (37.5%)
+  • IMPAIRED  : 3 (37.5%)
+  • COLLAPSED : 1 (12.5%)
+
+DETAILED RESULTS:
+-----------------
+1. 🏝️ Tropical Rainforest - Amazon
+   IBR: 0.902 - PRISTINE
+
+2. 🌲 Coniferous Forest - Siberia
+   IBR: 0.788 - FUNCTIONAL
+
+3. 🌾 Steppe - Mongolia
+   IBR: 0.638 - IMPAIRED
+
+4. 🏜️ Desert - Sahara
+   IBR: 0.312 - COLLAPSED
+
+5. 💧 Wetlands - Everglades
+   IBR: 0.777 - FUNCTIONAL
+
+6. 🏔️ Alpine Region - Alps
+   IBR: 0.601 - IMPAIRED
+
+7. 🌴 Mangrove - Southeast Asia
+   IBR: 0.777 - FUNCTIONAL
+
+8. 🌿 Temperate Grassland - US Plains
+   IBR: 0.667 - IMPAIRED
+
+============================================================

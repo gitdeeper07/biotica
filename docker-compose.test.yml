@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+test:
+build: .
+command: pytest tests/ -v
+volumes:
+- ./coverage:/app/coverage

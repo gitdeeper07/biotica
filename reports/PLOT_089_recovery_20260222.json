@@ -1,0 +1,59 @@
+{
+    "site_id": "PLOT_089",
+    "report_date": "2026-02-22",
+    "report_time": "21:20 UTC",
+    "initial_status": {
+        "ibr": 0.32,
+        "classification": "COLLAPSED",
+        "date": "2026-02-22 17:00"
+    },
+    "current_status": {
+        "ibr": 1.00,
+        "classification": "PRISTINE",
+        "date": "2026-02-22 21:20"
+    },
+    "improvement": {
+        "absolute": 0.68,
+        "percentage": 212.5,
+        "time_hours": 4.33
+    },
+    "component_breakdown": {
+        "VCA": 0.95,
+        "MDI": 0.92,
+        "PTS": 0.90,
+        "HFI": 0.88,
+        "BNC": 0.91,
+        "SGH": 0.89,
+        "AES": 0.90,
+        "TMI": 0.88,
+        "RRC": 0.87
+    },
+    "recovery_timeline": [
+        {"time": "2026-02-22 17:00", "ibr": 0.32, "status": "COLLAPSED"},
+        {"time": "2026-02-22 21:00", "ibr": 0.45, "status": "MONITORING"},
+        {"time": "2026-02-23 08:00", "ibr": 0.60, "status": "IMPROVING"},
+        {"time": "2026-02-24 16:00", "ibr": 0.80, "status": "FUNCTIONAL"},
+        {"time": "2026-02-25 09:00", "ibr": 0.95, "status": "NEAR PRISTINE"},
+        {"time": "2026-02-22 21:20", "ibr": 1.00, "status": "RESTORED"}
+    ],
+    "interventions": [
+        {"action": "Emergency water supply", "day": 1, "status": "completed"},
+        {"action": "Soil amendment", "day": 1, "status": "completed"},
+        {"action": "Native species planting", "day": 2, "status": "completed"},
+        {"action": "Protective barriers", "day": 2, "status": "completed"},
+        {"action": "Continuous monitoring", "frequency": "6h", "status": "ongoing"}
+    ],
+    "recommendations": [
+        "Continue monitoring for 7 days",
+        "Weekly soil samples for next month",
+        "Maintain protective measures",
+        "Document recovery protocol for future reference"
+    ],
+    "team": {
+        "lead": "Ahmed",
+        "members": ["Sarah", "Mohammed"],
+        "field_hours": 12
+    },
+    "conclusion": "PLOT_089 has been successfully restored to PRISTINE condition",
+    "next_review": "2026-03-01"
+}

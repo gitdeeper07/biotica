@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biotica-ecosystem"
+version = "1.0.2"
+description = "BIOTICA: Bio-Geochemical Framework for Ecosystem Resilience Assessment"
+readme = "README.md"
+authors = [{name = "Samir Baladi", email = "gitdeeper@gmail.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://biotica.gitlab.io"
+Source = "https://gitlab.com/biotica/biotica"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["biotica"]

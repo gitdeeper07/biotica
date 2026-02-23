@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="BIOTICA Documentation — Complete guide for the Bio-Geochemical Ecosystem Resilience Assessment Framework."/>
+<meta name="keywords" content="BIOTICA Documentation, Ecosystem Resilience, IBR Index, Biogeochemistry, API Reference"/>
+<meta name="author" content="Samir Baladi"/>
+<title>🌿 BIOTICA Documentation — Ecosystem Resilience Assessment Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   TOKENS  (BIOTICA design system)
+═══════════════════════════════════════ */
+:root {
+  --bg-dark:  #0a1a0f;
+  --bg-card:  #0f2318;
+  --bg-deep:  #071410;
+  --bg-light: #132b1a;
+  --panel:    #0d1e12;
+  --rim:      #1a3624;
+
+  --green-1: #0D5C3A;
+  --green-2: #1A7A50;
+  --green-3: #2DA06A;
+  --green-4: #50C88A;
+  --green-5: #8CDCB4;
+
+  --text-white:  #F0FAF4;
+  --text-bright: #D4EDDF;
+  --text-medium: #A8CCBA;
+  --text-soft:   #78A08C;
+
+  --gold:   #E8B95A;
+  --gold-d: #C8973A;
+  --coral:  #E07050;
+  --teal:   #2DD4C8;
+  --border: rgba(45,160,106,.15);
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --syne:  'Syne', sans-serif;
+  --sans:  'Inter', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-bright);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* grid texture */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    linear-gradient(rgba(45,160,106,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,160,106,.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ══════════ NAVBAR ══════════ */
+.navbar {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  background: rgba(10,26,15,.93);
+  backdrop-filter: blur(18px);
+  padding: 1rem 0;
+  border-bottom: 2px solid var(--green-2);
+}
+.nav-container {
+  max-width: 1400px; margin:0 auto; padding:0 2rem;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.logo {
+  font-family: var(--syne); font-size:1.45rem; font-weight:800;
+  color: var(--green-4); text-decoration:none;
+  display:flex; align-items:center; gap:.5rem; letter-spacing:.02em;
+}
+.logo span { color: var(--gold); }
+
+.nav-links { display:flex; gap:1.8rem; list-style:none; }
+.nav-links a {
+  color: var(--text-medium); text-decoration:none;
+  font-weight:500; font-size:.88rem;
+  letter-spacing:.06em; text-transform:uppercase;
+  transition: color .25s; position:relative;
+}
+.nav-links a:hover { color: var(--green-4); }
+.nav-links a.active { color: var(--green-4); }
+.nav-links a.active::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:100%; height:2px; background: var(--green-4);
+}
+.menu-toggle {
+  display:none; background:none; border:none;
+  color: var(--text-white); font-size:1.5rem; cursor:pointer;
+}
+
+/* ══════════ PAGE HEADER ══════════ */
+.page-header {
+  background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-dark) 50%, var(--bg-light) 100%);
+  padding: 130px 2rem 90px;
+  text-align: center;
+  position: relative; overflow:hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-header::before {
+  content:'🌿'; position:absolute;
+  font-size:22rem; opacity:.03;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.page-header-wave {
+  position:absolute; bottom:0; left:0; right:0; height:80px;
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'><path fill='%230a1a0f' d='M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z'/></svg>") no-repeat bottom;
+  background-size:cover;
+}
+.page-header-content { max-width:960px; margin:0 auto; position:relative; z-index:2; }
+.page-header h1 {
+  font-family: var(--syne);
+  font-size: clamp(2.6rem,6vw,4.5rem); font-weight:800;
+  margin-bottom:1rem; line-height:1.1;
+  color: var(--green-4);
+  text-shadow: 0 0 50px rgba(80,200,138,.25);
+}
+.page-header p {
+  font-size: clamp(1rem,2vw,1.2rem); opacity:.88;
+  max-width:720px; margin:0 auto;
+  color: var(--text-medium);
+}
+.header-badges {
+  display:flex; gap:.8rem; flex-wrap:wrap; justify-content:center;
+  margin-top:1.8rem;
+}
+.badge {
+  font-family: var(--mono); font-size:.78rem;
+  padding:.35rem .9rem; border-radius:3px;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.badge-green  { background:rgba(13,92,58,.5);  color:var(--green-4); border:1px solid var(--green-2); }
+.badge-gold   { background:rgba(232,185,90,.1); color:var(--gold);    border:1px solid rgba(232,185,90,.35); }
+.badge-teal   { background:rgba(45,212,200,.08);color:var(--teal);    border:1px solid rgba(45,212,200,.3); }
+
+/* ══════════ LAYOUT ══════════ */
+.content-wrapper {
+  display:flex; max-width:1400px; margin:0 auto;
+  padding:2.5rem 2rem; gap:2.5rem;
+  position:relative; z-index:1;
+}
+
+/* ══════════ SIDEBAR ══════════ */
+.sidebar {
+  width:270px; flex-shrink:0;
+  position:sticky; top:90px; height:fit-content;
+}
+.sidebar-nav {
+  background: var(--panel);
+  border-radius:10px; padding:1.5rem;
+  border:1px solid var(--border);
+  border-bottom:3px solid var(--green-2);
+}
+.sidebar-nav h3 {
+  color: var(--green-4); margin-bottom:1rem;
+  font-size:1rem; font-family: var(--syne); font-weight:700;
+  border-bottom:1px solid var(--border); padding-bottom:.5rem;
+}
+.sidebar-nav ul { list-style:none; }
+.sidebar-nav ul li { margin-bottom:.35rem; }
+.sidebar-nav a {
+  color: var(--text-medium); text-decoration:none;
+  padding:.45rem .7rem; display:block; border-radius:5px;
+  font-size:.92rem; transition: all .25s;
+}
+.sidebar-nav a:hover {
+  background: rgba(45,160,106,.1);
+  color: var(--green-4); padding-left:1.1rem;
+}
+.sidebar-nav a.active {
+  background: var(--green-1); color:#fff; font-weight:600;
+}
+.sidebar-search {
+  margin-bottom:1.2rem;
+}
+.sidebar-search input {
+  width:100%; padding:.6rem .9rem;
+  background: var(--bg-dark); border:1px solid var(--border);
+  border-radius:5px; color: var(--text-bright);
+  font-family: var(--sans); font-size:.88rem;
+  outline:none; transition: border-color .2s;
+}
+.sidebar-search input:focus { border-color: var(--green-3); }
+.sidebar-search input::placeholder { color: var(--text-soft); }
+
+/* ══════════ DOC SECTIONS ══════════ */
+.doc-content { flex:1; min-width:0; }
+
+.doc-section {
+  background: var(--panel);
+  border-radius:10px; padding:2.2rem;
+  margin-bottom:2rem;
+  border:1px solid var(--border);
+  border-bottom:3px solid var(--green-2);
+  transition: border-color .3s;
+  position:relative; z-index:1;
+}
+.doc-section:hover { border-bottom-color: var(--green-4); }
+
+.doc-section h2 {
+  color: var(--green-4); margin-bottom:1.5rem;
+  padding-bottom:.6rem; border-bottom:1px solid var(--border);
+  font-size:1.9rem; font-family: var(--syne); font-weight:700;
+}
+.doc-section h3 {
+  color: var(--gold); margin-top:2rem; margin-bottom:1rem;
+  font-size:1.3rem; font-family: var(--syne); font-weight:600;
+}
+.doc-section h4 {
+  color: var(--text-white); margin-top:1.4rem; margin-bottom:.7rem;
+  font-size:1.1rem; font-weight:600;
+}
+.doc-section p {
+  margin-bottom:1rem; line-height:1.85; color: var(--text-medium);
+  font-size:1rem;
+}
+.doc-section ul, .doc-section ol {
+  margin-left:2rem; margin-bottom:1rem; color: var(--text-medium);
+}
+.doc-section li { margin-bottom:.5rem; line-height:1.75; }
+.doc-section strong { color: var(--text-white); font-weight:600; }
+.doc-section a { color: var(--green-4); text-decoration:none; transition:color .2s; }
+.doc-section a:hover { color: var(--gold); }
+
+/* ══════════ CODE BLOCKS ══════════ */
+.code-block {
+  background: #060e08;
+  color: var(--green-4); padding:1.5rem; border-radius:8px;
+  overflow-x:auto; margin:1.2rem 0;
+  font-family: var(--mono); font-size:.88rem; line-height:1.65;
+  border:1px solid rgba(45,160,106,.2);
+  white-space: pre;
+}
+.code-block .cm  { color: var(--text-soft); }   /* comment */
+.code-block .cw  { color: var(--gold); }         /* weight/keyword */
+.code-block .cl  { color: var(--text-medium); }  /* label */
+.code-block .cs  { color: var(--teal); }         /* string */
+
+.inline-code {
+  background: rgba(13,92,58,.2); color: var(--green-4);
+  padding:.15rem .45rem; border-radius:3px;
+  font-family: var(--mono); font-size:.9em;
+  border:1px solid rgba(45,160,106,.25);
+}
+
+/* ══════════ INFO BOXES ══════════ */
+.info-box {
+  padding:1.4rem 1.6rem; border-radius:8px;
+  margin:1.4rem 0; border-left:4px solid;
+}
+.info-box.note    { background:rgba(45,212,200,.07);  border-color:var(--teal); }
+.info-box.warning { background:rgba(232,185,90,.08);  border-color:var(--gold); }
+.info-box.danger  { background:rgba(224,112,80,.08);  border-color:var(--coral); }
+.info-box.success { background:rgba(45,160,106,.1);   border-color:var(--green-3); }
+.info-box-title {
+  font-weight:700; margin-bottom:.5rem;
+  display:flex; align-items:center; gap:.5rem;
+  color: var(--text-white); font-size:1rem;
+}
+.info-box p { margin-bottom:0; font-size:.95rem; }
+
+/* ══════════ TABLES ══════════ */
+.doc-table { width:100%; margin:1.5rem 0; overflow-x:auto; display:block; }
+.doc-table table { width:100%; min-width:580px; border-collapse:collapse; border:1px solid var(--border); }
+.doc-table th {
+  background: rgba(13,92,58,.3); color: var(--green-4);
+  padding:1rem 1.1rem; text-align:left; font-weight:600;
+  border-bottom:2px solid var(--green-2); font-size:.92rem;
+  font-family: var(--syne);
+}
+.doc-table td {
+  padding:.8rem 1.1rem; border-bottom:1px solid var(--border);
+  color: var(--text-medium); font-size:.92rem; vertical-align:top;
+}
+.doc-table tr:hover { background: rgba(45,160,106,.05); }
+
+/* ══════════ PARAM CARDS ══════════ */
+.param-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+  gap:1.3rem; margin:1.5rem 0;
+}
+.param-card {
+  background: var(--bg-card);
+  border:1px solid var(--border); border-left:4px solid var(--green-3);
+  padding:1.5rem; border-radius:8px;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.param-card:hover {
+  transform:translateY(-4px);
+  border-color: var(--green-4);
+  box-shadow:0 6px 24px rgba(45,160,106,.2);
+}
+.param-card h4 {
+  color: var(--gold); margin-top:0; margin-bottom:.4rem;
+  font-family: var(--syne); font-size:1rem;
+}
+.param-value {
+  font-size:1.9rem; font-weight:700; color: var(--green-4);
+  margin:.4rem 0; font-family: var(--mono);
+}
+.param-threshold { font-size:.88rem; color: var(--text-soft); margin-top:.4rem; }
+
+/* ══════════ QUICK-LINK CARDS ══════════ */
+.quick-links {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:1.2rem; margin:2rem 0;
+}
+.quick-link {
+  background: var(--bg-card);
+  border:1px solid var(--border); border-radius:8px;
+  padding:1.5rem; text-align:center; text-decoration:none;
+  color: var(--text-white); transition: all .25s;
+}
+.quick-link:hover {
+  border-color: var(--green-4); transform:translateY(-5px);
+  box-shadow:0 6px 24px rgba(45,160,106,.2);
+}
+.quick-link-icon { font-size:2.4rem; margin-bottom:.5rem; display:block; }
+.quick-link h4 { color: var(--green-4); margin:.5rem 0; font-family: var(--syne); font-size:1rem; }
+.quick-link p  { color: var(--text-soft); font-size:.88rem; margin:0; }
+
+/* ══════════ IBR LEVEL BADGES ══════════ */
+.ibr-levels-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+  gap:1rem; margin:1.5rem 0;
+}
+.ibr-badge {
+  text-align:center; padding:1rem .8rem;
+  border-radius:8px; font-weight:600;
+  font-size:.9rem; font-family: var(--syne);
+}
+.ibr-pristine  { background:#166534; color:#bbf7d0; }
+.ibr-functional{ background:var(--green-1); color:var(--green-5); }
+.ibr-impaired  { background:#854d0e; color:#fef08a; }
+.ibr-degraded  { background:#7f1d1d; color:#fca5a5; }
+.ibr-collapsed { background:#374151; color:#d1d5db; }
+
+/* ══════════ STEP INDICATORS ══════════ */
+.steps { display:flex; flex-direction:column; gap:1.2rem; margin:1.5rem 0; }
+.step {
+  display:grid; grid-template-columns:48px 1fr; gap:1.2rem; align-items:start;
+}
+.step-num {
+  width:48px; height:48px; border-radius:50%;
+  background: var(--green-1); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family: var(--syne); font-size:1.1rem; font-weight:700;
+  flex-shrink:0;
+}
+.step-body h4 { color: var(--text-white); margin-bottom:.3rem; margin-top:.6rem; }
+.step-body p  { color: var(--text-medium); margin:0; font-size:.95rem; }
+
+/* ══════════ CLI ══════════ */
+.cli {
+  background:#060e08; color: var(--green-4);
+  padding:1rem 1.2rem; border-radius:6px;
+  font-family: var(--mono); margin:1rem 0;
+  border:1px solid rgba(45,160,106,.2); font-size:.9rem;
+}
+.cli-prompt { color: var(--gold); }
+
+/* ══════════ VERSION TIMELINE ══════════ */
+.version-list { display:flex; flex-direction:column; gap:1rem; margin:1.5rem 0; }
+.version-item {
+  display:grid; grid-template-columns:110px 1fr;
+  gap:1.2rem; align-items:start;
+  background: var(--bg-card);
+  border:1px solid var(--border); border-radius:8px; padding:1.2rem 1.5rem;
+}
+.version-tag {
+  font-family: var(--mono); font-size:.85rem;
+  color: var(--gold); padding:.2rem .6rem;
+  background:rgba(232,185,90,.1); border:1px solid rgba(232,185,90,.3);
+  border-radius:3px; text-align:center; align-self:start;
+}
+.version-body h4 { color: var(--text-white); font-size:1rem; margin-bottom:.3rem; }
+.version-body p  { color: var(--text-medium); font-size:.9rem; margin:0; }
+
+/* ══════════ FOOTER  (exact METEORICA style, adapted for BIOTICA) ══════════ */
+.footer {
+  background: var(--bg-deep);
+  color: var(--text-medium);
+  padding: 60px 2rem 30px;
+  border-top: 2px solid var(--green-2);
+  margin-top: 4rem;
+  position: relative; z-index: 1;
+}
+.footer-container {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2.5rem; margin-bottom: 3rem;
+}
+.footer-section h3 {
+  color: var(--green-4);
+  font-family: var(--syne);
+  font-size: 1rem; letter-spacing: .04em;
+  margin-bottom: 1rem;
+}
+.footer-section p { font-size: .9rem; line-height: 1.8; color: var(--text-medium); }
+.footer-section ul { list-style: none; }
+.footer-section ul li { margin-bottom: .5rem; }
+.footer-section ul li a {
+  color: var(--text-medium); text-decoration: none;
+  font-size: .88rem; transition: color .3s;
+}
+.footer-section ul li a:hover { color: var(--green-4); }
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem; text-align: center;
+  font-size: .85rem; opacity: .65;
+  color: var(--text-medium);
+}
+.footer-bottom a { color: var(--green-4); text-decoration: none; transition: color .3s; }
+.footer-bottom a:hover { color: var(--gold); }
+
+/* ══════════ BACK TO TOP ══════════ */
+.back-to-top {
+  position:fixed; bottom:2rem; right:2rem;
+  background: var(--green-2); color:#fff;
+  width:50px; height:50px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  text-decoration:none; font-size:1.2rem;
+  box-shadow:0 4px 14px rgba(45,160,106,.35);
+  opacity:0; transition: opacity .3s, transform .3s;
+  z-index:999;
+}
+.back-to-top.visible { opacity:1; }
+.back-to-top:hover { background: var(--green-3); transform:translateY(-3px); }
+
+/* ══════════ RESPONSIVE ══════════ */
+@media(max-width:1024px){
+  .content-wrapper { flex-direction:column; padding:1.5rem; }
+  .sidebar { width:100%; position:static; margin-bottom:2rem; }
+}
+@media(max-width:768px){
+  .menu-toggle { display:block; }
+  .nav-links {
+    display:none; position:absolute;
+    top:100%; left:0; right:0;
+    background: var(--bg-deep);
+    flex-direction:column; gap:0;
+    padding:1rem 0;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links.active { display:flex; }
+  .nav-links li { padding:.7rem 2rem; }
+  .page-header h1 { font-size:2.2rem; }
+  .doc-section { padding:1.5rem; }
+  .param-grid { grid-template-columns:1fr; }
+  .quick-links { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">🌿 BIOTI<span>CA</span></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#about">Overview</a></li>
+      <li><a href="index.html#parameters">Parameters</a></li>
+      <li><a href="index.html#ibr">IBR Levels</a></li>
+      <li><a href="index.html#cases">Case Studies</a></li>
+      <li><a href="index.html#pubs">Publications</a></li>
+      <li><a href="biotica-documentation.html" class="active">Documentation</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-header-content">
+    <h1>🌿 BIOTICA Documentation</h1>
+    <p>Complete guide for the Bio-Geochemical Ecosystem Resilience Assessment Framework — implementation, API reference, and operational guidelines</p>
+    <div class="header-badges">
+      <span class="badge badge-green">v1.0.0 · Stable</span>
+      <span class="badge badge-gold">Python 3.11+ · R 4.3+</span>
+      <span class="badge badge-teal">CC BY 4.0 · Open Source</span>
+    </div>
+  </div>
+  <div class="page-header-wave"></div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="content-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-search">
+        <input type="text" placeholder="🔍  Search docs…" id="docSearch"/>
+      </div>
+      <h3>📑 Documentation</h3>
+      <ul>
+        <li><a href="#overview"      class="active">🌿 Overview</a></li>
+        <li><a href="#installation">  💻 Installation</a></li>
+        <li><a href="#quick-start">   🚀 Quick Start</a></li>
+        <li><a href="#parameters">    🔬 9 Parameters</a></li>
+        <li><a href="#ibr-levels">    📊 IBR Levels</a></li>
+        <li><a href="#api">           📡 API Reference</a></li>
+        <li><a href="#workflows">     ⚙️ Workflows</a></li>
+        <li><a href="#data">          🗄️ Data &amp; Formats</a></li>
+        <li><a href="#ai">            🤖 AI Classifier</a></li>
+        <li><a href="#validation">    ✅ Validation</a></li>
+        <li><a href="#changelog">     🕐 Changelog</a></li>
+        <li><a href="#publications">  📄 Publications</a></li>
+        <li><a href="#acknowledgments">🙏 Acknowledgments</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- DOC CONTENT -->
+  <main class="doc-content">
+
+    <!-- ── OVERVIEW ── -->
+    <section id="overview" class="doc-section">
+      <h2>🌿 Overview</h2>
+      <p>BIOTICA is an open-source, multi-dimensional framework for the integrated assessment, predictive modeling, and cosmological contextualization of ecosystem resilience. The system integrates <strong>nine analytical parameters</strong> into a single operational composite — the <strong>Integrated Biotic Resilience (IBR) index</strong> — validated across <strong>3,412 ecosystem plots</strong> from <strong>22 biome types</strong> spanning <strong>6 continents</strong>.</p>
+
+      <div class="info-box success">
+        <div class="info-box-title">✅ Production Ready</div>
+        <p>BIOTICA has been validated across 3,412 plots achieving 92.6% classification accuracy and 89.4% agreement with expert field surveys. The framework is actively used for REDD+ carbon accounting audits and ecosystem tipping-point early warning.</p>
+      </div>
+
+      <h3>Key Capabilities</h3>
+      <ul>
+        <li><strong>High Accuracy:</strong> 92.6% IBR classification across 22-biome leave-one-biome cross-validation</li>
+        <li><strong>AI-Assisted Classification:</strong> 89.4% agreement with expert field surveys on 682 held-out plots</li>
+        <li><strong>Early Warning:</strong> 8–14 month tipping point lead time via critical slowing-down detection</li>
+        <li><strong>Carbon Accounting:</strong> ±31 Mg C·ha⁻¹ precision vs. ±180 Mg C·ha⁻¹ for allometric estimates</li>
+        <li><strong>Phenological Precision:</strong> ±6.2 days across 180 eddy covariance flux tower sites</li>
+        <li><strong>Legacy Audit:</strong> 14.7% error rate flagged across 2,100 REDD+ database units</li>
+      </ul>
+
+      <h3>System Statistics</h3>
+      <div class="param-grid">
+        <div class="param-card">
+          <h4>IBR Classification Accuracy</h4>
+          <div class="param-value">92.6%</div>
+          <p class="param-threshold">22-biome leave-one-biome CV</p>
+        </div>
+        <div class="param-card">
+          <h4>AI Agreement</h4>
+          <div class="param-value">89.4%</div>
+          <p class="param-threshold">vs. expert field surveys</p>
+        </div>
+        <div class="param-card">
+          <h4>Ecosystem Plots</h4>
+          <div class="param-value">3,412</div>
+          <p class="param-threshold">Across 22 biomes, 6 continents</p>
+        </div>
+        <div class="param-card">
+          <h4>Tipping Point Warning</h4>
+          <div class="param-value">8–14 mo</div>
+          <p class="param-threshold">Before observed state transitions</p>
+        </div>
+      </div>
+
+      <h3>Quick Navigation</h3>
+      <div class="quick-links">
+        <a href="#installation" class="quick-link"><span class="quick-link-icon">💻</span><h4>Installation</h4><p>Setup in 5 minutes</p></a>
+        <a href="#quick-start"  class="quick-link"><span class="quick-link-icon">🚀</span><h4>Quick Start</h4><p>Your first IBR computation</p></a>
+        <a href="#api"          class="quick-link"><span class="quick-link-icon">📡</span><h4>API Reference</h4><p>Full module documentation</p></a>
+        <a href="#workflows"    class="quick-link"><span class="quick-link-icon">⚙️</span><h4>Workflows</h4><p>Snakemake pipelines</p></a>
+      </div>
+    </section>
+
+    <!-- ── INSTALLATION ── -->
+    <section id="installation" class="doc-section">
+      <h2>💻 Installation</h2>
+
+      <h3>System Requirements</h3>
+      <ul>
+        <li><strong>Python:</strong> 3.11 or higher</li>
+        <li><strong>R:</strong> 4.3 or higher (for Bayesian weight estimation and tipping-point modules)</li>
+        <li><strong>RAM:</strong> 8 GB minimum (16 GB recommended for MI-CNN classifier)</li>
+        <li><strong>Storage:</strong> ~5 GB for reference database and biome thresholds</li>
+        <li><strong>CUDA:</strong> 11.8+ optional (GPU acceleration for AI classifier)</li>
+        <li><strong>GDAL:</strong> 3.6+ (for geospatial raster processing)</li>
+      </ul>
+
+      <h3>Install from GitLab</h3>
+      <div class="code-block"><span class="cm"># Clone the repository</span>
+git clone https://gitlab.com/gitdeeper07/biotica.git
+cd biotica
+
+<span class="cm"># Create conda environment (recommended)</span>
+conda env create -f environment.yml
+conda activate biotica
+
+<span class="cm"># Install Python package in editable mode</span>
+pip install -e .
+
+<span class="cm"># Install with all optional extras</span>
+pip install -e <span class="cs">".[dev,docs,ai,r-bridge]"</span>
+
+<span class="cm"># Install R dependencies</span>
+Rscript -e <span class="cs">"install.packages(c('brms','igraph','adegenet','poppr','earlywarnings','vegan'))"</span>
+
+<span class="cm"># Run tests to verify installation</span>
+pytest tests/unit/ -v</div>
+
+      <h3>Install from PyPI</h3>
+      <div class="code-block">pip install biotica</div>
+
+      <h3>Pull Reference Data (DVC)</h3>
+      <div class="code-block"><span class="cm"># Pull reference data only (~2 GB)</span>
+dvc remote add -d zenodo https://zenodo.org/record/biotica2026
+dvc pull data/reference/
+
+<span class="cm"># Pull complete dataset (~48 GB)</span>
+dvc pull</div>
+
+      <div class="info-box warning">
+        <div class="info-box-title">⚠️ Note on full dataset</div>
+        <p>The complete 48 GB dataset requires institutional storage credentials for metagenomics (EBI MGnify) and genomics (NCBI SRA) archives. The 2 GB reference package is fully open and sufficient for most use cases.</p>
+      </div>
+    </section>
+
+    <!-- ── QUICK START ── -->
+    <section id="quick-start" class="doc-section">
+      <h2>🚀 Quick Start</h2>
+
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Compute a Single Parameter</h4></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Assemble the IBR Index</h4></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Classify and Generate Report</h4></div></div>
+      </div>
+
+      <h3>1 · Compute the MDI for a Plot</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.parameters <span class="cw">import</span> MDI
+
+<span class="cm"># Instantiate with path to shotgun metagenome</span>
+mdi = MDI(metagenome_path=<span class="cs">"data/processed/metagenomes/plot_0042.tsv"</span>)
+
+score       = mdi.compute()       <span class="cm"># → float in [0, 1]</span>
+uncertainty = mdi.uncertainty()   <span class="cm"># → ± value</span>
+report      = mdi.report()        <span class="cm"># → diagnostic dict</span>
+
+print(f<span class="cs">"MDI = {score:.3f} ± {uncertainty:.3f}"</span>)  <span class="cm"># MDI = 0.847 ± 0.031</span></div>
+
+      <h3>2 · Compute the IBR Composite Index</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.ibr <span class="cw">import</span> IBRComposite
+
+ibr = IBRComposite(plot_id=<span class="cs">"amazon_plot_0042"</span>)
+ibr.load_parameters({
+    <span class="cs">"VCA"</span>: 0.831, <span class="cs">"MDI"</span>: 0.847, <span class="cs">"PTS"</span>: 0.911,
+    <span class="cs">"HFI"</span>: 0.789, <span class="cs">"BNC"</span>: 0.802, <span class="cs">"SGH"</span>: 0.714,
+    <span class="cs">"AES"</span>: 0.923, <span class="cs">"TMI"</span>: 0.823, <span class="cs">"RRC"</span>: 0.761,
+})
+
+result = ibr.compute()
+print(result.score)           <span class="cm"># → 0.834</span>
+print(result.classification)  <span class="cm"># → "FUNCTIONAL"</span>
+print(result.report())        <span class="cm"># → full diagnostic dict</span></div>
+
+      <h3>3 · Run the Full Pipeline</h3>
+      <div class="code-block"><span class="cm"># Full pipeline: raw data → IBR scores for all plots</span>
+python scripts/compute_ibr.py \
+  --input  data/raw/ \
+  --output data/processed/ibr_scores/ \
+  --biome-ref data/reference/biome_thresholds.csv \
+  --cores 16</div>
+
+      <h3>4 · Tipping Point Detection</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.statistics <span class="cw">import</span> TippingPointDetector
+<span class="cw">import</span> pandas <span class="cw">as</span> pd
+
+ibr_ts = pd.read_csv(<span class="cs">"data/processed/ibr_timeseries/amazon_plot_0042.csv"</span>)
+
+detector = TippingPointDetector(window=<span class="cw">24</span>, lag=<span class="cw">1</span>)
+signals  = detector.analyze(ibr_ts)
+
+<span class="cw">if</span> signals.critical_slowing_down:
+    print(f<span class="cs">"⚠️ Warning: collapse risk in ~{signals.estimated_months} months"</span>)</div>
+    </section>
+
+    <!-- ── PARAMETERS ── -->
+    <section id="parameters" class="doc-section">
+      <h2>🔬 The Nine IBR Parameters</h2>
+      <p>Each parameter captures a distinct and statistically independent dimension of ecosystem identity and resilience. Weights were determined through a three-stage Bayesian principal component analysis across all 3,412 validation plots.</p>
+
+      <div class="doc-table">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Symbol</th><th>Parameter</th><th>Weight</th><th>Domain</th><th>Key Instrument</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><span class="inline-code">VCA</span></td><td>Vegetative Carbon Absorption</td><td>20%</td><td>Remote Sensing · Carbon</td><td>DESIS/PRISMA hyperspectral</td></tr>
+            <tr><td>2</td><td><span class="inline-code">MDI</span></td><td>Microbial Diversity Index</td><td>15%</td><td>Soil Metagenomics</td><td>Illumina NovaSeq shotgun</td></tr>
+            <tr><td>3</td><td><span class="inline-code">PTS</span></td><td>Phenological Time Shift</td><td>12%</td><td>Climate Ecology</td><td>PhenoCam · Landsat archive</td></tr>
+            <tr><td>4</td><td><span class="inline-code">HFI</span></td><td>Hydrological Flux Index</td><td>11%</td><td>Ecohydrology</td><td>Eddy covariance · MODIS ET</td></tr>
+            <tr><td>5</td><td><span class="inline-code">BNC</span></td><td>Biogeochemical Nutrient Cycle</td><td>10%</td><td>Soil Science</td><td>ICP-MS · CNS elemental analysis</td></tr>
+            <tr><td>6</td><td><span class="inline-code">SGH</span></td><td>Species Genetic Heterogeneity</td><td>9%</td><td>Population Genomics</td><td>RADseq · whole-genome reseq</td></tr>
+            <tr><td>7</td><td><span class="inline-code">AES</span></td><td>Anthropogenic Encroachment Score</td><td>8%</td><td>Land Use Science</td><td>ESA World Cover · FRAGSTATS</td></tr>
+            <tr><td>8</td><td><span class="inline-code">TMI</span></td><td>Trophic Metadata Integration</td><td>8%</td><td>Food Web Ecology</td><td>Metabarcoding · camera traps</td></tr>
+            <tr><td>9</td><td><span class="inline-code">RRC</span></td><td>Regenerative Recovery Capacity</td><td>7%</td><td>Disturbance Ecology</td><td>Chronosequence sampling</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Composite Formula</h3>
+      <div class="code-block"><span class="cm">// Integrated Biotic Resilience — Composite Formula</span>
+
+IBR =
+  <span class="cw">0.20</span> · VCA*  <span class="cm">// Vegetative Carbon Absorption</span>
++ <span class="cw">0.15</span> · MDI*  <span class="cm">// Microbial Diversity Index</span>
++ <span class="cw">0.12</span> · PTS*  <span class="cm">// Phenological Time Shift</span>
++ <span class="cw">0.11</span> · HFI*  <span class="cm">// Hydrological Flux Index</span>
++ <span class="cw">0.10</span> · BNC*  <span class="cm">// Biogeochemical Nutrient Cycle</span>
++ <span class="cw">0.09</span> · SGH*  <span class="cm">// Species Genetic Heterogeneity</span>
++ <span class="cw">0.08</span> · AES*  <span class="cm">// Anthropogenic Encroachment Score</span>
++ <span class="cw">0.08</span> · TMI*  <span class="cm">// Trophic Metadata Integration</span>
++ <span class="cw">0.07</span> · RRC*  <span class="cm">// Regenerative Recovery Capacity</span>
+
+<span class="cm">// Sigmoid correction for non-linear cross-parameter interactions:</span>
+<span class="cm">// IBR_corrected = σ(Σ wᵢ · xᵢ + β)  where σ(z) = 1 / (1 + e⁻ᶻ)</span>
+<span class="cm">// Each Pᵢ* normalized to [0,1] relative to biome-type reference thresholds</span></div>
+
+      <div class="info-box note">
+        <div class="info-box-title">📘 Normalization</div>
+        <p>All parameters are normalized to [0,1] relative to biome-specific reference distributions, not global minima/maxima. This ensures that a tropical rainforest and an arctic tundra are evaluated against their own reference states, not against each other. See <span class="inline-code">biotica/ibr/normalization.py</span> and <span class="inline-code">data/reference/biome_thresholds.csv</span>.</p>
+      </div>
+    </section>
+
+    <!-- ── IBR LEVELS ── -->
+    <section id="ibr-levels" class="doc-section">
+      <h2>📊 IBR Classification Levels</h2>
+      <p>The IBR score is mapped to five operational classification levels that guide conservation prioritization, restoration planning, and carbon accounting decisions.</p>
+
+      <div class="ibr-levels-grid">
+        <div class="ibr-badge ibr-pristine">🟢 PRISTINE<br><small>&gt; 0.88</small></div>
+        <div class="ibr-badge ibr-functional">🟡 FUNCTIONAL<br><small>0.75 – 0.88</small></div>
+        <div class="ibr-badge ibr-impaired">🟠 IMPAIRED<br><small>0.60 – 0.75</small></div>
+        <div class="ibr-badge ibr-degraded">🔴 DEGRADED<br><small>0.45 – 0.60</small></div>
+        <div class="ibr-badge ibr-collapsed">⚫ COLLAPSED<br><small>&lt; 0.45</small></div>
+      </div>
+
+      <div class="doc-table" style="margin-top:1.5rem">
+        <table>
+          <thead><tr><th>Class</th><th>IBR Range</th><th>Ecological State</th><th>Recommended Action</th></tr></thead>
+          <tbody>
+            <tr><td><strong style="color:#4ade80">PRISTINE</strong></td><td>&gt; 0.88</td><td>Reference state, full ecological function, maximum carbon stock</td><td>Passive protection, long-term monitoring</td></tr>
+            <tr><td><strong style="color:var(--green-4)">FUNCTIONAL</strong></td><td>0.75 – 0.88</td><td>Near-reference, minor departures, self-regulating resilience intact</td><td>Standard monitoring, adaptive management</td></tr>
+            <tr><td><strong style="color:var(--gold)">IMPAIRED</strong></td><td>0.60 – 0.75</td><td>Measurable degradation, recovery feasible under active management</td><td>Multi-parameter restoration intervention</td></tr>
+            <tr><td><strong style="color:var(--coral)">DEGRADED</strong></td><td>0.45 – 0.60</td><td>Significant loss, high tipping point risk</td><td>Immediate intensive intervention</td></tr>
+            <tr><td><strong style="color:#9ca3af">COLLAPSED</strong></td><td>&lt; 0.45</td><td>Alternative stable state, standard recovery trajectories not applicable</td><td>Full consortium characterization</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── API REFERENCE ── -->
+    <section id="api" class="doc-section">
+      <h2>📡 API Reference</h2>
+
+      <h3>biotica.parameters — Individual Parameter Modules</h3>
+      <p>All nine parameter classes share a common interface:</p>
+      <div class="code-block"><span class="cw">from</span> biotica.parameters <span class="cw">import</span> VCA, MDI, PTS, HFI, BNC, SGH, AES, TMI, RRC
+
+<span class="cm"># Unified interface — same for all 9 parameters</span>
+p = MDI(metagenome_path=<span class="cs">"..."</span>)   <span class="cm"># instantiate</span>
+p.compute()                          <span class="cm"># → float [0,1]</span>
+p.uncertainty()                      <span class="cm"># → float (± value)</span>
+p.report()                           <span class="cm"># → dict (full diagnostics)</span>
+p.plot()                             <span class="cm"># → matplotlib Figure</span></div>
+
+      <h3>biotica.ibr — Composite Index Engine</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.ibr <span class="cw">import</span> IBRComposite, IBRNormalizer, IBRThresholds
+
+<span class="cm"># IBRComposite</span>
+ibr = IBRComposite(plot_id=<span class="cs">"plot_001"</span>, biome=<span class="cs">"tropical_moist_forest"</span>)
+ibr.load_parameters(param_dict)      <span class="cm"># dict of 9 raw scores</span>
+result = ibr.compute()               <span class="cm"># → IBRResult namedtuple</span>
+result.score                         <span class="cm"># float</span>
+result.classification                <span class="cm"># str: PRISTINE / FUNCTIONAL / …</span>
+result.confidence                    <span class="cm"># float [0,1]</span>
+result.report()                      <span class="cm"># dict</span>
+
+<span class="cm"># IBRNormalizer — per-biome normalization</span>
+norm = IBRNormalizer(biome=<span class="cs">"tropical_moist_forest"</span>)
+norm.normalize(raw_score, parameter=<span class="cs">"MDI"</span>)  <span class="cm"># → float [0,1]</span>
+
+<span class="cm"># IBRThresholds — classification threshold registry</span>
+thresh = IBRThresholds()
+thresh.classify(0.834)               <span class="cm"># → "FUNCTIONAL"</span>
+thresh.get_all()                     <span class="cm"># → dict of all thresholds</span></div>
+
+      <h3>biotica.ai — MI-CNN Classifier</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.ai <span class="cw">import</span> MICNNClassifier
+
+<span class="cm"># Load pre-trained model</span>
+model = MICNNClassifier.from_pretrained(<span class="cs">"models/mi_cnn_v1/"</span>)
+
+<span class="cm"># Predict biome classification and IBR estimate</span>
+prediction = model.predict(
+    spectral=<span class="cs">"path/to/hyperspectral.npy"</span>,
+    climate=<span class="cs">"path/to/worldclim.csv"</span>,
+    terrain=<span class="cs">"path/to/terrain.csv"</span>,
+)
+prediction.biome         <span class="cm"># → str</span>
+prediction.ibr_estimate  <span class="cm"># → float</span>
+prediction.confidence    <span class="cm"># → float</span>
+
+<span class="cm"># Grad-CAM interpretability</span>
+cam = model.gradcam(prediction)
+cam.plot()               <span class="cm"># → Figure showing attention map</span></div>
+
+      <h3>biotica.statistics — Statistical Framework</h3>
+      <div class="code-block"><span class="cw">from</span> biotica.statistics <span class="cw">import</span> (
+    TippingPointDetector,
+    CrossValidator,
+    SensitivityAnalyzer,
+    UncertaintyPropagator
+)
+
+<span class="cm"># Tipping point — critical slowing-down detection</span>
+detector = TippingPointDetector(window=<span class="cw">24</span>, lag=<span class="cw">1</span>)
+signals  = detector.analyze(ibr_timeseries_df)
+signals.critical_slowing_down   <span class="cm"># bool</span>
+signals.estimated_months        <span class="cm"># int: estimated lead time</span>
+signals.ar1_trend               <span class="cm"># float: AR(1) coefficient trend</span>
+signals.variance_trend          <span class="cm"># float: variance trend</span>
+
+<span class="cm"># Cross-validation</span>
+cv = CrossValidator(n_folds=<span class="cs">"leave_one_biome"</span>)
+cv.run(plots_df, ibr_fn)        <span class="cm"># → CrossValidationResult</span></div>
+    </section>
+
+    <!-- ── WORKFLOWS ── -->
+    <section id="workflows" class="doc-section">
+      <h2>⚙️ Snakemake Workflows</h2>
+      <p>All analyses are reproducible via Snakemake. The master pipeline automatically determines which rules to run based on available inputs.</p>
+
+      <h3>Run Full Validation Pipeline</h3>
+      <div class="code-block"><span class="cm"># Full pipeline — requires complete dataset (~72h on 32-core HPC)</span>
+snakemake --cores 32 --use-conda all
+
+<span class="cm"># Reproduce publication figures only</span>
+snakemake --cores 8 figures
+
+<span class="cm"># Single case study</span>
+snakemake --cores 4 results/case_studies/amazon/
+
+<span class="cm"># Dry run — preview without executing</span>
+snakemake --cores 32 --use-conda --dry-run all</div>
+
+      <h3>Available Rules</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>Rule File</th><th>Description</th><th>Inputs</th><th>Outputs</th></tr></thead>
+          <tbody>
+            <tr><td><span class="inline-code">preprocessing.smk</span></td><td>Spectral, flux, metagenomic preprocessing</td><td>data/raw/</td><td>data/processed/</td></tr>
+            <tr><td><span class="inline-code">parameter_computation.smk</span></td><td>Compute all 9 parameter scores per plot</td><td>data/processed/</td><td>data/processed/parameters/</td></tr>
+            <tr><td><span class="inline-code">ibr_aggregation.smk</span></td><td>Normalize and aggregate IBR index</td><td>data/processed/parameters/</td><td>data/processed/ibr_scores/</td></tr>
+            <tr><td><span class="inline-code">ai_classification.smk</span></td><td>Train and evaluate MI-CNN classifier</td><td>data/processed/</td><td>models/ + results/</td></tr>
+            <tr><td><span class="inline-code">validation.smk</span></td><td>Cross-validation, sensitivity, uncertainty</td><td>data/processed/ibr_scores/</td><td>results/validation/</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box note">
+        <div class="info-box-title">📘 HPC Submission</div>
+        <p>Use <span class="inline-code">scripts/batch_process.sh</span> for SLURM cluster submission. Configure cores and memory in <span class="inline-code">workflows/config/cluster.yaml</span>. The full pipeline requires approximately 72 CPU-hours on a 32-core node.</p>
+      </div>
+    </section>
+
+    <!-- ── DATA & FORMATS ── -->
+    <section id="data" class="doc-section">
+      <h2>🗄️ Data &amp; Formats</h2>
+
+      <h3>Supported Input Formats</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>Parameter</th><th>Format</th><th>Source</th><th>Typical Size</th></tr></thead>
+          <tbody>
+            <tr><td>VCA (spectral)</td><td>ENVI BSQ / GeoTIFF NetCDF</td><td>DESIS · PRISMA · Sentinel-2</td><td>0.5–4 GB per scene</td></tr>
+            <tr><td>MDI (metagenomics)</td><td>TSV gene abundance table</td><td>MGnify · EBI</td><td>10–200 MB per sample</td></tr>
+            <tr><td>PTS (phenocam)</td><td>CSV time-series GCC</td><td>PhenoCam Network</td><td>~1 MB per site/year</td></tr>
+            <tr><td>HFI (flux tower)</td><td>NetCDF4 (FLUXNET 2015)</td><td>FLUXNET · ICOS</td><td>5–50 MB per site</td></tr>
+            <tr><td>BNC (soil chemistry)</td><td>CSV elemental analysis</td><td>Lab measurements</td><td>&lt;1 MB per plot</td></tr>
+            <tr><td>SGH (genomics)</td><td>VCF 4.2 (bgzipped + tabix)</td><td>NCBI SRA</td><td>1–50 GB per population</td></tr>
+            <tr><td>AES (landscape)</td><td>GeoTIFF raster + SHP</td><td>ESA World Cover · GFW</td><td>50–500 MB per region</td></tr>
+            <tr><td>TMI (food web)</td><td>CSV adjacency + metabarcoding</td><td>Field surveys + eDNA</td><td>&lt;5 MB per plot</td></tr>
+            <tr><td>RRC (chronosequence)</td><td>CSV time-series biomass</td><td>Field surveys</td><td>&lt;1 MB per site</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Output Formats</h3>
+      <div class="code-block"><span class="cm"># IBR score output (CSV)</span>
+plot_id, biome, VCA, MDI, PTS, HFI, BNC, SGH, AES, TMI, RRC, IBR, classification, confidence
+
+<span class="cm"># GeoJSON output (for spatial analysis)</span>
+{
+  <span class="cs">"type"</span>: <span class="cs">"Feature"</span>,
+  <span class="cs">"properties"</span>: {
+    <span class="cs">"plot_id"</span>: <span class="cs">"amazon_0042"</span>,
+    <span class="cs">"IBR"</span>: <span class="cw">0.834</span>,
+    <span class="cs">"classification"</span>: <span class="cs">"FUNCTIONAL"</span>,
+    <span class="cs">"tipping_point_risk"</span>: <span class="cw">false</span>
+  }
+}</div>
+    </section>
+
+    <!-- ── AI CLASSIFIER ── -->
+    <section id="ai" class="doc-section">
+      <h2>🤖 MI-CNN AI Classifier</h2>
+      <p>The Multi-Input Convolutional Neural Network (MI-CNN) processes four parallel data streams and achieves 89.4% agreement with expert field surveys on 682 held-out plots.</p>
+
+      <h3>Architecture Overview</h3>
+      <div class="doc-table">
+        <table>
+          <thead><tr><th>Stream</th><th>Input</th><th>Architecture</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>Spectral</td><td>Hyperspectral cube (426 bands)</td><td>1D-CNN × 3 layers</td><td>128-dim embedding</td></tr>
+            <tr><td>Temporal</td><td>VI time-series (24 months)</td><td>1D-CNN × 2 layers</td><td>64-dim embedding</td></tr>
+            <tr><td>Climate</td><td>19 WorldClim bioclimatic vars</td><td>Dense × 3 layers</td><td>32-dim embedding</td></tr>
+            <tr><td>Terrain</td><td>8 morphometric derivatives</td><td>Dense × 2 layers</td><td>16-dim embedding</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The four streams are concatenated into a 240-dimensional feature vector and passed through a classification head (3 dense layers → 22-class biome softmax + IBR regression head).</p>
+
+      <h3>Training and Evaluation</h3>
+      <div class="code-block"><span class="cm"># Train MI-CNN from scratch</span>
+python scripts/train_classifier.py \
+  --data data/processed/ \
+  --model-dir models/mi_cnn_v1/ \
+  --epochs 150 \
+  --batch-size 64 \
+  --lr 0.0005
+
+<span class="cm"># Evaluate on held-out validation set</span>
+python scripts/evaluate_classifier.py \
+  --model models/mi_cnn_v1/ \
+  --test-set data/processed/validation/</div>
+
+      <div class="info-box success">
+        <div class="info-box-title">✅ Validated Performance</div>
+        <p>MI-CNN v1.0 achieves 89.4% biome classification accuracy and 0.91 Pearson r for IBR regression on the 682-plot held-out test set. Grad-CAM analysis confirms that spectral features in the red-edge (700–730 nm) and SWIR (1550–1750 nm) ranges contribute most to classification decisions.</p>
+      </div>
+    </section>
+
+    <!-- ── VALIDATION ── -->
+    <section id="validation" class="doc-section">
+      <h2>✅ Validation &amp; Reproducibility</h2>
+
+      <h3>Cross-Validation Protocol</h3>
+      <p>BIOTICA uses a <strong>leave-one-biome-out cross-validation</strong> design: the model is trained on 21 biome types and evaluated on the held-out 22nd. This prevents any within-biome data leakage and tests generalization across entirely unseen ecosystem types.</p>
+
+      <div class="param-grid">
+        <div class="param-card">
+          <h4>Leave-One-Biome CV</h4>
+          <div class="param-value">92.6%</div>
+          <p class="param-threshold">Mean accuracy across 22 folds</p>
+        </div>
+        <div class="param-card">
+          <h4>Worst-Case Biome</h4>
+          <div class="param-value">87.1%</div>
+          <p class="param-threshold">Tropical dry forest (n=98 plots)</p>
+        </div>
+        <div class="param-card">
+          <h4>Best-Case Biome</h4>
+          <div class="param-value">97.3%</div>
+          <p class="param-threshold">Boreal forest (n=312 plots)</p>
+        </div>
+        <div class="param-card">
+          <h4>Reproducibility Hash</h4>
+          <div class="param-value" style="font-size:1rem">sha256:b4f2</div>
+          <p class="param-threshold">Ubuntu 22.04 · macOS 14.2</p>
+        </div>
+      </div>
+
+      <h3>Reproducing All Results</h3>
+      <div class="code-block"><span class="cm"># Reproduce all paper results (requires full dataset)</span>
+snakemake --cores 32 --use-conda all
+
+<span class="cm"># Reproduce specific table from paper</span>
+python scripts/generate_figures.py --table 2  <span class="cm"># IBR comparison table</span>
+python scripts/generate_figures.py --fig 3    <span class="cm"># MDI-carbon correlation</span></div>
+    </section>
+
+    <!-- ── CHANGELOG ── -->
+    <section id="changelog" class="doc-section">
+      <h2>🕐 Changelog</h2>
+      <div class="version-list">
+        <div class="version-item">
+          <div class="version-tag">v1.0.0<br><small>Mar 2026</small></div>
+          <div class="version-body">
+            <h4>Initial Release</h4>
+            <p>Full nine-parameter IBR framework, MI-CNN v1.0 classifier, Snakemake pipelines, validated across 3,412 plots from 22 biomes. Paper submitted to Nature Sustainability.</p>
+          </div>
+        </div>
+        <div class="version-item">
+          <div class="version-tag">v0.9.0<br><small>Jan 2026</small></div>
+          <div class="version-body">
+            <h4>Beta Release</h4>
+            <p>Complete parameter suite, Bayesian weight determination, tipping-point detection module. Internal validation across Amazon and Australian datasets.</p>
+          </div>
+        </div>
+        <div class="version-item">
+          <div class="version-tag">v0.5.0<br><small>Sep 2025</small></div>
+          <div class="version-body">
+            <h4>Alpha — Core Framework</h4>
+            <p>VCA, MDI, and PTS modules functional. Proof-of-concept IBR composite. Initial 800-plot dataset assembled from Amazon and Serengeti sites.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PUBLICATIONS ── -->
+    <section id="publications" class="doc-section">
+      <h2>📄 Publications</h2>
+
+      <div class="info-box note">
+        <div class="info-box-title">📘 Primary Reference</div>
+        <p>If you use BIOTICA in your research, please cite the primary paper using the BibTeX entry below.</p>
+      </div>
+
+      <div class="code-block">@article{baladi2026biotica,
+  title   = {<span class="cs">{BIOTICA}: A Multi-Dimensional Bio-Geochemical Framework for the
+             Systematic Assessment, Predictive Modeling, and Cosmological
+             Contextualization of Ecosystem Resilience</span>},
+  author  = {<span class="cs">Baladi, Samir</span>},
+  journal = {<span class="cs">Nature Sustainability</span>},
+  year    = {<span class="cw">2026</span>},
+  doi     = {<span class="cs">10.14293/BIOTICA.2026.001</span>},
+  note    = {<span class="cs">Submitted March 2026</span>}
+}</div>
+
+      <ul>
+        <li><a href="https://doi.org/10.14293/BIOTICA.2026.001" target="_blank">Baladi, S. (2026). BIOTICA Framework — Nature Sustainability. DOI: 10.14293/BIOTICA.2026.001</a></li>
+        <li><a href="https://doi.org/10.5281/zenodo.biotica.2026" target="_blank">BIOTICA Classification Dataset v1.0 — Zenodo. DOI: 10.5281/zenodo.biotica.2026</a></li>
+        <li><a href="https://gitlab.com/gitdeeper07/biotica" target="_blank">Preprint: MDI-Carbon Correlation across 1,240 Plots — GitLab</a></li>
+        <li><a href="https://gitlab.com/gitdeeper07/biotica" target="_blank">Preprint: Critical Slowing-Down in IBR Time Series — GitLab</a></li>
+      </ul>
+    </section>
+
+    <!-- ── ACKNOWLEDGMENTS ── -->
+    <section id="acknowledgments" class="doc-section">
+      <h2>🙏 Acknowledgments</h2>
+      <p>The BIOTICA framework builds upon the foundational work of the global ecosystem science community. Special thanks to:</p>
+      <ul>
+        <li>The FLUXNET and ICOS communities for making eddy covariance data openly accessible</li>
+        <li>The MGnify / EBI team for metagenomics data infrastructure</li>
+        <li>The PhenoCam Network for long-term phenological time series</li>
+        <li>The Global Biodiversity Information Facility (GBIF) for occurrence data</li>
+        <li>Global Forest Watch for forest cover change and fragmentation layers</li>
+        <li>The Arrernte people of the Northern Territory and Aboriginal rangers of SE Australia for sharing traditional ecological knowledge used in TEK validation protocols</li>
+        <li>The Ronin Institute for supporting independent scholarship</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER — exact METEORICA structure, adapted for BIOTICA -->
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-section">
+      <h3>🌿 BIOTICA</h3>
+      <p>A Multi-Dimensional Bio-Geochemical Framework for the Systematic Assessment, Predictive Modeling, and Cosmological Contextualization of Ecosystem Resilience.</p>
+      <p style="margin-top:1rem; font-size:.82rem; opacity:.5;">Version 1.0.0 · CC BY 4.0 License</p>
+      <p style="font-size:.82rem; opacity:.5;">DOI: 10.14293/BIOTICA.2026.001</p>
+      <p style="font-size:.82rem; opacity:.5;">ORCID: 0009-0003-8903-0029</p>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#about">Overview</a></li>
+        <li><a href="index.html#parameters">Parameters</a></li>
+        <li><a href="index.html#ibr">IBR Levels</a></li>
+        <li><a href="index.html#cases">Case Studies</a></li>
+        <li><a href="index.html#pubs">Publications</a></li>
+        <li><a href="biotica-documentation.html">Documentation</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Code Repositories</h3>
+      <ul>
+         <li><a href="https://gitlab.com/biotica/biotica">GitLab (Primary)</a></li>
+                    <li><a href="https://github.com/biotica/biotica">GitHub (Mirror)</a></li>
+                    <li><a href="https://bitbucket.org/gitdeeper07/biotica">Bitbucket </a></li>
+                        <li><a href="https://codeberg.org/gitdeeper07/biotica">Codeberg (Backup)</a></li>
+                    <li><a href="https://pypi.org/project/biotica-ecosystem/1.0.0/">PyPI Package</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Resources</h3>
+      <ul>
+       <li><a href="https://zenodo.org/records/18745310">Research Paper (DOI)</a></li>
+        <li><a href="https://osf.io/h8vn3/overview">OSF Preregistration</a></li>
+        <li><a href="https://orcid.org/0009-0003-8903-0029">ORCID Profile</a></li>
+        <li><a href="https://gitlab.com/gitdeeper07/biotica/-/raw/main/README.md">Documentation</a></li>
+        <li><a href="https://www.gbif.org" tar>GBIF Data</a></li>
+        <li><a href="https://www.globalforestwatch.org">Global Forest Watch</a></li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="footer-bottom">
+    <p>Copyright © BIOTICA 🌿 2026 | All rights reserved</p>
+  </div>
+</footer>
+
+<!-- Back to Top -->
+<a href="#" class="back-to-top" id="backToTop">↑</a>
+
+<script>
+/* mobile menu */
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('active');
+}
+document.querySelectorAll('.nav-links a').forEach(l =>
+  l.addEventListener('click', () => document.getElementById('navLinks').classList.remove('active'))
+);
+
+/* smooth scroll */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) window.scrollTo({ top: t.offsetTop - 80, behavior: 'smooth' });
+  });
+});
+
+/* active sidebar highlight */
+const sideLinks = document.querySelectorAll('.sidebar-nav a');
+const sections  = document.querySelectorAll('.doc-section');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (pageYOffset >= s.offsetTop - 150) cur = s.id; });
+  sideLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+  });
+});
+
+/* back to top */
+const btt = document.getElementById('backToTop');
+window.addEventListener('scroll', () => btt.classList.toggle('visible', window.scrollY > 300));
+btt.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top:0, behavior:'smooth' }); });
+
+/* sidebar search filter */
+document.getElementById('docSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  sideLinks.forEach(l => {
+    l.parentElement.style.display = (!q || l.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+BIOTICA Daily Report - Sun Feb 22 17:45:35 +00 2026
+=================================
+Total Plots: 25
+Average IBR: 0.76
+Classification:
+  PRISTINE  : 5
+  FUNCTIONAL: 10
+  IMPAIRED  : 6
+  DEGRADED  : 3
+  COLLAPSED : 1
+=================================
+Alerts: 3

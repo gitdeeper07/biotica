@@ -1,0 +1,52 @@
+{
+    "date": "2026-02-22",
+    "timestamp": "2026-02-22T17:47:30+00:00",
+    "total_plots": 25,
+    "average_ibr": 0.76,
+    "classification": {
+        "pristine": 5,
+        "functional": 10,
+        "impaired": 6,
+        "degraded": 3,
+        "collapsed": 1
+    },
+    "health_index": 0.66,
+    "alerts": 3,
+    "risk_level": "CRITICAL",
+    "metrics": {
+        "healthy_percentage": 60,
+        "degraded_percentage": 16,
+        "critical_percentage": 4,
+        "mean_ibr": 0.76,
+        "ibr_range": {
+            "min": 0.32,
+            "max": 0.92
+        }
+    },
+    "alerts_list": [
+        {
+            "plot": "PLOT_042",
+            "ibr": 0.45,
+            "status": "DEGRADED",
+            "priority": "HIGH"
+        },
+        {
+            "plot": "PLOT_089",
+            "ibr": 0.32,
+            "status": "COLLAPSED",
+            "priority": "CRITICAL"
+        },
+        {
+            "plot": "PLOT_123",
+            "ibr": 0.48,
+            "status": "DEGRADED",
+            "priority": "HIGH"
+        }
+    ],
+    "recommendations": [
+        "Emergency intervention required for PLOT_089 (COLLAPSED)",
+        "Schedule restoration for 3 DEGRADED plots",
+        "Increase monitoring frequency for 6 IMPAIRED plots",
+        "Maintain protection for 15 healthy plots"
+    ]
+}

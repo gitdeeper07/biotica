@@ -1,0 +1,25 @@
+{
+    "timestamp": "2026-02-22T23:59:59",
+    "trends": {
+        "avg_daily_change": -0.01,
+        "volatility": 0.02,
+        "linear_trend": -0.012,
+        "current_mean": 0.72,
+        "days_analyzed": 7
+    },
+    "alerts": {
+        "total_alerts": 3,
+        "active_alerts": 3,
+        "resolved_alerts": 0,
+        "by_severity": {
+            "CRITICAL": 1,
+            "HIGH": 1,
+            "MEDIUM": 1,
+            "LOW": 0
+        }
+    },
+    "recommendations": [
+        "🚨 CRITICAL SITES: 1 sites need immediate action",
+        "⚠️  NEGATIVE TREND: Overall IBR declining"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "timestamp": "2026-02-22T15:15:00+00:00",
+    "severity": "HIGH",
+    "plot_id": "PLOT_042",
+    "ibr_score": 0.42,
+    "message": "Critical degradation trend - intervention needed within 7 days",
+    "status": "new",
+    "recommendation": "Schedule field survey",
+    "deadline": "2026-03-01"
+}

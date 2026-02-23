@@ -1,0 +1,50 @@
+image: python:3.9
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+stages:
+  - test
+  - build
+  - deploy
+
+before_script:
+  - python --version
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  script:
+    - pytest
+  artifacts:
+    paths:
+      - coverage.xml
+      - htmlcov/
+
+build:
+  stage: build
+  script:
+    - pip install build
+    - python -m build
+  artifacts:
+    paths:
+      - dist/
+
+pages:
+  stage: deploy
+  script:
+    - pip install mkdocs
+    - mkdocs build
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

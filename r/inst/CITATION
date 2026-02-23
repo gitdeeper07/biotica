@@ -1,0 +1,29 @@
+citHeader("To cite BIOTICA in publications use:")
+
+citEntry(
+  entry = "Article",
+  title = "BIOTICA: A Comprehensive Framework for Ecosystem Resilience Assessment",
+  author = person("Samir", "Baladi"),
+  journal = "Journal of Statistical Software",
+  year = "2026",
+  volume = "XX",
+  number = "Y",
+  pages = "1-25",
+  doi = "10.18637/jss.v000.i00",
+  textVersion = paste("Baladi, S. (2026).",
+                      "BIOTICA: A Comprehensive Framework for",
+                      "Ecosystem Resilience Assessment.",
+                      "Journal of Statistical Software, XX(Y), 1-25.",
+                      "doi:10.18637/jss.v000.i00")
+)
+
+citEntry(
+  entry = "Manual",
+  title = "BIOTICA R Package Reference Manual",
+  author = person("Samir", "Baladi"),
+  year = "2026",
+  note = "R package version 1.0.0",
+  textVersion = paste("Baladi, S. (2026).",
+                      "BIOTICA R Package Reference Manual.",
+                      "R package version 1.0.0.")
+)

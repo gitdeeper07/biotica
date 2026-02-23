@@ -1,0 +1,3 @@
+month,year,total_plots,mean_ibr,std_ibr,min_ibr,max_ibr,critical_alerts,total_alerts
+January,2026,650,0.78,0.15,0.35,0.98,3,72
+February,2026,700,0.73,0.14,0.28,0.95,5,85

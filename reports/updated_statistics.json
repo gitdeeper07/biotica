@@ -1,0 +1,17 @@
+{
+    "date": "2026-02-22",
+    "time": "21:20 UTC",
+    "total_sites": 25,
+    "mean_ibr": 0.78,
+    "classification": {
+        "pristine": 6,
+        "functional": 10,
+        "impaired": 6,
+        "degraded": 3,
+        "collapsed": 0
+    },
+    "critical_alerts": 0,
+    "high_priority": 3,
+    "recovered_sites": ["PLOT_089"],
+    "health_index": 0.68
+}

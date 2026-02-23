@@ -1,0 +1,32 @@
+╔════════════════════════════════════════════════════╗
+║     🌿 BIOTICA - Quick Reference Guide             ║
+╚════════════════════════════════════════════════════╝
+
+📊 ANALYSIS COMMANDS:
+   python3 stats.py                    - Show basic statistics
+   python3 biotica_demo.py              - Run complete demo
+   python3 test_quick.py                - Quick functionality test
+
+📁 REPORT COMMANDS:
+   cd reports && ./generate_report.sh daily  - Generate daily report
+   ls -la reports/daily/                      - List all reports
+   cat reports/daily/latest_report.md         - View latest report
+
+📈 DASHBOARD:
+   ./dashboard.sh                         - Launch interactive dashboard
+
+🔧 UTILITIES:
+   python3 server.py                      - Start web server (port 8000)
+   python3 help_biotica.py                 - Show help
+
+📊 LATEST METRICS (as of 2026-02-22):
+   • Total Plots: 25
+   • Average IBR: 0.76
+   • Health Index: 0.66
+   • Risk Level: CRITICAL
+   • Active Alerts: 3
+
+⚠️ CRITICAL SITES:
+   • PLOT_089 - COLLAPSED (IBR=0.32)
+
+💡 TIP: Run './dashboard.sh' for real-time monitoring

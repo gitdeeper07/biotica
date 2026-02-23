@@ -1,0 +1,53 @@
+[build]
+  publish = "public"
+  functions = "functions"
+  command = "echo 'BIOTICA Dashboard Deployment'"
+
+[build.environment]
+  PYTHON_VERSION = "3.10"
+  NODE_VERSION = "18"
+
+# Redirects for API endpoints
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/stats"
+  to = "/.netlify/functions/get-stats"
+  status = 200
+
+[[redirects]]
+  from = "/api/sites"
+  to = "/.netlify/functions/sites"
+  status = 200
+
+[[redirects]]
+  from = "/api/alerts"
+  to = "/.netlify/functions/alerts"
+  status = 200
+
+[[redirects]]
+  from = "/api/parameters"
+  to = "/.netlify/functions/parameters"
+  status = 200
+
+[[redirects]]
+  from = "/api/config"
+  to = "/.netlify/functions/get-config"
+  status = 200
+
+# SPA redirect
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"

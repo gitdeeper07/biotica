@@ -1,0 +1,34 @@
+====================================
+BIOTICA DAILY REPORT
+Date: 2026-02-22
+====================================
+
+SUMMARY
+--------
+Total plots analyzed: 25
+Average IBR: 0.76
+Min IBR: 0.45
+Max IBR: 0.92
+Alert count: 3
+
+CLASSIFICATION DISTRIBUTION
+---------------------------
+PRISTINE   : 5 (20%)
+FUNCTIONAL : 10 (40%)
+IMPAIRED   : 6 (24%)
+DEGRADED   : 3 (12%)
+COLLAPSED  : 1 (4%)
+
+ALERTS
+-------
+- PLOT_042: IBR=0.45 (DEGRADED)
+- PLOT_089: IBR=0.32 (COLLAPSED)
+- PLOT_123: IBR=0.48 (DEGRADED)
+
+STATISTICS
+-----------
+Mean IBR: 0.76
+Std Dev: 0.12
+Median: 0.78
+
+====================================

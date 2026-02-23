@@ -1,0 +1,28 @@
+site_name: BIOTICA
+site_description: Advanced Biotechnology Project
+site_author: BIOTICA Team
+repo_url: https://gitlab.com/biotica/biotica
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - API: api.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings
